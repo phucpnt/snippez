@@ -13,6 +13,7 @@ export class SnippetEditor {
   }
 
   runSnippet(){
+    // poc of we can run the snippet with webpack on new window
     window.open('https://google.com');
   }
  }

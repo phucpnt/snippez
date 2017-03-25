@@ -12,8 +12,8 @@ const webpackConfig = require('./webpack.config.dev');
  * TODO:
  * [x]: serve the html page for running the gist
  * [ ]: AUTO refresh the html page when gist is updated.
- * @param {Number} snippetId 
- * @param {Array} snippetFiles 
+ * @param {Number} snippetId
+ * @param {Array} snippetFiles
  */
 
 const exec = (snippetId, snippetFiles) => {
@@ -21,10 +21,11 @@ const exec = (snippetId, snippetFiles) => {
   const modules = snippetFiles.map(file => getRequiredModules(file.content))
     .reduce((modules, next) => modules.concat(next));
 
+  mkdirp.sync(path.join(__dirname, '../tmp', snippetId));
+
   // install the modules, at the tempo dir
   installModules(modules);
 
-  mkdirp.sync(path.join(__dirname, '../tmp', snippetId));
   // prepare the files for webpack
   snippetFiles.forEach(file => {
     fs.writeFileSync(path.join(__dirname, '../tmp', snippetId, file.name), file.content);
@@ -87,7 +88,7 @@ function startWebpack(snippetId){
       'X-Custom-Header': 'yes',
       'Cache-Control': 'no-cache, no-store, must-revalidate',
       'Pragma': 'no-cache',
-      'Expires': 0,
+      'Expires': '0',
     },
     stats: {
       colors: true,
@@ -96,7 +97,7 @@ function startWebpack(snippetId){
   });
   const router = Router();
   router.get(`/${snippetId}`, (req, res) => {
-    const template = hb.compile(fs.readFileSync(path.join(__dirname, '../resources/snippet-entry.hbs'), {encoding: 'UTF8'}));
+    const template = hb.compile(fs.readFileSync(path.join(__dirname, './resource/snippet-entry.hbs'), {encoding: 'UTF8'}));
     res.send(template({entry: `//localhost:${devPort}/gist-a2/${snippetId}.js`}));
   });
   server.use(router);
@@ -127,7 +128,7 @@ console.log(_);
 
 const snippets = [
   {
-    name: 'index.js', 
+    name: 'index.js',
     content: `
   import * as _ from 'lodash';
   import abc from './abc';

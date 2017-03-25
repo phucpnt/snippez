@@ -4,7 +4,7 @@ const path = require('path');
 const devPort = 15106;
 module.exports = (entry, rootModule, port = devPort) => {
   const config = {
-    devtool: 'source-map',
+    devtool: 'eval-inline-source-map',
     entry: entry || {},
     output: {
       path: path.join(__dirname, '../../dist'),
@@ -12,17 +12,16 @@ module.exports = (entry, rootModule, port = devPort) => {
       filename: '[name].js',
     },
     resolve: {
+      modules: rootModule,
       alias: {},
-      rootModule,
     },
     module: {
       loaders: [{
         test: /\.js?$/,
         exclude: /(node_modules)/,
-        loader: 'babel',
-        query: {
-          presets: ['es2015', 'react'],
-        }
+        use: [
+          {loader: 'babel-loader', options: {presets: ['es2015', 'react']}}
+        ],
       }, {
         test: /\.less$/,
         loader: 'style!css?sourceMap!less?sourceMap',
@@ -31,11 +30,8 @@ module.exports = (entry, rootModule, port = devPort) => {
         loader: 'style!css?sourceMap',
       }, {
         test: /\.(png|jpg|svg|gif|eot|woff|ttf)$/,
-        loader: 'file-loader?name=[path][name].[ext]',
-      }, {
-        test: /ext-lib[\\\/].+\.js$/,
-        loader: 'imports?require=>false,module=>false,define=>false,exports=>undefined',
-      }, ],
+        loader: 'url-loader',
+      },],
     },
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
