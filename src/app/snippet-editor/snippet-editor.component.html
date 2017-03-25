@@ -1,0 +1,14 @@
+ <div>
+  <h5>Snippet A</h5>
+  <button class="btn btn-sm btn-success"(click)="runSnippet()">Run</button>
+  <button class="btn btn-sm btn-primary">Save</button>
+  <button class="btn btn-sm">Share</button>
+  <button class="btn btn-sm">Delete</button>
+</div>
+<ul id="demoTabs" class="nav" role="tablist">
+    <li *ngFor="let item of fileList" role="presentation" class="nav-item">
+        <button class="btn btn-link nav-link" type="button">{{item.name}}</button>
+    </li>
+</ul>
+
+

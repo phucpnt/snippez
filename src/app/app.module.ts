@@ -4,10 +4,12 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { AboutComponent } from './about/about.component';
+// import { HomeComponent } from './home/home.component';
+// import { AboutComponent } from './about/about.component';
+import { SnippetList } from './snippet-list/snippet-list.component';
+import { SnippetEditor } from './snippet-editor/snippet-editor.component';
 import { ApiService } from './shared';
-import { routing } from './app.routing';
+// import { routing } from './app.routing';
 
 import { removeNgStyles, createNewHosts } from '@angularclass/hmr';
 
@@ -16,12 +18,14 @@ import { removeNgStyles, createNewHosts } from '@angularclass/hmr';
     BrowserModule,
     HttpModule,
     FormsModule,
-    routing
+    // routing
   ],
   declarations: [
     AppComponent,
-    HomeComponent,
-    AboutComponent
+    // HomeComponent,
+    // AboutComponent,
+    SnippetList,
+    SnippetEditor,
   ],
   providers: [
     ApiService
