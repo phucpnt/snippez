@@ -3,9 +3,10 @@ const path = require('path');
 const mkdirp = require('mkdirp');
 const {execSync} = require('child_process');
 const Webpack = require('webpack');
+const express = require('express');
 const Router = require('express').Router;
 const hb = require('handlebars');
-const WebpackDevServer = require('webpack-dev-server');
+const webpackMiddleware = require('webpack-dev-middleware');
 const webpackConfig = require('./webpack.config.dev');
 
 /**
@@ -16,7 +17,7 @@ const webpackConfig = require('./webpack.config.dev');
  * @param {Array} snippetFiles
  */
 
-const exec = (snippetId, snippetFiles) => {
+const exec = (snippetId, snippetFiles, callback) => {
   // parsing the module required.
   const modules = snippetFiles.map(file => getRequiredModules(file.content))
     .reduce((modules, next) => modules.concat(next));
@@ -32,7 +33,7 @@ const exec = (snippetId, snippetFiles) => {
   });
 
   // start the webpack server
-  startWebpack(snippetId);
+  startWebpack(snippetId, callback);
 }
 
 function getRequiredModules(src){
@@ -65,12 +66,18 @@ function installModules(modules, cwd = path.join(__dirname, '../tmp')){
   execSync(['npm install'].concat(modules).join(' '), {cwd});
 }
 
-function startWebpack(snippetId){
+let server = null;
+
+function startWebpack(snippetId, callback){
   const devPort = 15106;
+
+  if(server !== null) return;
+
   const compiler = new Webpack(webpackConfig({
     [snippetId]: path.join(__dirname, `../tmp/${snippetId}/index.js`),
   }, [path.join(__dirname, `../tmp/node_modules`)], devPort))
-  const server = new WebpackDevServer(compiler, {
+  server = express();
+  const wmInstance = webpackMiddleware(compiler, {
     contentBase: 'demo',
     hot: false,
     inline: true,
@@ -95,6 +102,8 @@ function startWebpack(snippetId){
       chunks: false,
     },
   });
+  server.use(wmInstance);
+
   const router = Router();
   router.get(`/${snippetId}`, (req, res) => {
     const template = hb.compile(fs.readFileSync(path.join(__dirname, './resource/snippet-entry.hbs'), {encoding: 'UTF8'}));
@@ -104,6 +113,8 @@ function startWebpack(snippetId){
   server.listen(devPort, '0.0.0.0', () => {
     console.log(`DEV SERVER start on port: ${devPort}`);
   });
+
+  wmInstance.waitUntilValid(callback);
 
 }
 
@@ -141,4 +152,8 @@ const snippets = [
   }
 ]
 
-exec('test', snippets);
+// exec('test', snippets, () => {
+//   console.log('ready!!');
+// });
+
+module.exports.exec = exec;

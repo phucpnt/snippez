@@ -26,6 +26,8 @@ module.exports = function makeWebpackConfig() {
    */
   var config = {};
 
+  config.target = 'electron-renderer';
+
   /**
    * Devtool
    * Reference: http://webpack.github.io/docs/configuration.html#devtool

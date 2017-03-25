@@ -1,4 +1,6 @@
-const electron = require('electron')
+const electron = require('electron');
+const {ipcMain} = require('electron');
+const {exec} = require('./snippet-exec');
 // Module to control application life.
 const app = electron.app
 // Module to create native browser window.
@@ -59,3 +61,23 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+ipcMain.on('snippet.run', (event, arg) => {
+  const snippets = [
+    {
+      name: 'index.js',
+      content: `
+  import * as _ from 'lodash';
+  import abc from './abc';
+  console.log(_.times(3, () => console.log('hello')));
+  `}, {
+      name: 'abc.js',
+      content: `
+  console.log('abc.js');
+    `
+    }
+  ]
+  exec('test', snippets, () => {
+    console.log('ready');
+    event.sender.send('snippet.run.ready');
+  });
+});
