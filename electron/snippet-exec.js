@@ -144,7 +144,7 @@ const snippets = [
   import * as _ from 'lodash';
   import abc from './abc';
   console.log(_.times(3, () => console.log('hello')));
-  `},{
+  `}, {
     name: 'abc.js',
     content: `
   console.log('abc.js');
