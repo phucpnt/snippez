@@ -1,7 +1,7 @@
 /**
  * Start setup for snippet.
- * [ ] Running the webpack server if not running
- * [ ] Or reload the webpack server if already running
+ * [x] Running the webpack server if not running
+ * [x] Or reload the webpack server if already running
  * @param {String} snippetId
  * @param {Function} callback
  */
@@ -14,22 +14,26 @@ const webpackMiddleware = require('webpack-dev-middleware');
 const webpackConfig = require('../webpack.config.dev');
 
 let server = null;
-
+let wmInstance = null;
 let config = {
   snippetsPath: path.join(__dirname, '../tmp/'),
   modulesLookPath: [path.join(__dirname, '../tmp/node_modules')],
 };
+let entryCache = {};
 
 function start(snippetId, callback){
   const devPort = 15106;
 
-  if(server !== null) return;
+  entryCache[snippetId] = `${config.snippetsPath}/${snippetId}/index.js`;
+  if(server !== null && wmInstance!== null){
+    wmInstance.invalidate();
+    return;
+  }
 
-  const compiler = new Webpack(webpackConfig({
-    [snippetId]: `${config.snippetsPath}/${snippetId}/index.js`,
-  }, config.modulesLookPath, devPort))
+
+  const compiler = new Webpack(webpackConfig(() => entryCache, config.modulesLookPath, devPort));
   server = express();
-  const wmInstance = webpackMiddleware(compiler, {
+  wmInstance = webpackMiddleware(compiler, {
     contentBase: 'demo',
     hot: false,
     inline: true,
@@ -67,7 +71,12 @@ function start(snippetId, callback){
     console.log(`DEV SERVER start on port: ${devPort}`);
   });
 
-  wmInstance.waitUntilValid(callback);
+  compiler.plugin('done', (stats) => {
+    process.nextTick(() => {
+      console.log('+++ bundle valid >>>')
+      callback();
+    })
+  });
 
 }
 
