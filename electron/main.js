@@ -72,6 +72,8 @@ ipcMain.on('snippet.run', (event, arg) => {
   `}, {
       name: 'abc.js',
       content: `
+  const preact = require('preact');
+  console.log(preact.render);
   console.log('abc.js');
     `
     }

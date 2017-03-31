@@ -1,10 +1,16 @@
 const webpack = require('webpack');
+const nodeExternals = require('webpack-node-externals');
 const path = require('path');
+const fs = require('fs');
 
 const devPort = 15106;
 module.exports = (entry, rootModule, port = devPort) => {
   const config = {
     devtool: 'eval-inline-source-map',
+    target: 'node',
+    externals: [nodeExternals({
+      modulesDir: path.join(__dirname, '../tmp/node_modules'),
+    })],
     entry: entry || {},
     output: {
       path: path.join(__dirname, '../../dist'),
@@ -16,6 +22,7 @@ module.exports = (entry, rootModule, port = devPort) => {
       alias: {},
     },
     module: {
+      noParse: /lodash/,
       loaders: [{
         test: /\.js?$/,
         exclude: /(node_modules)/,
