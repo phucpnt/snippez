@@ -7,7 +7,7 @@ const devPort = 15106;
 module.exports = (entry, rootModule, port = devPort) => {
   const config = {
     devtool: 'eval-inline-source-map',
-    target: 'node',
+    target: 'electron-renderer',
     externals: [nodeExternals({
       modulesDir: path.join(__dirname, '../tmp/node_modules'),
     })],

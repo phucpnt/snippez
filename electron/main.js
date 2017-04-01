@@ -1,12 +1,16 @@
 const electron = require('electron');
 const {ipcMain} = require('electron');
-const {exec} = require('./snippet-exec');
+const path = require('path');
+const _ = require('lodash');
+
+const {exec, config: snippetConfig} = require('./snippet');
 // Module to control application life.
 const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 
 if (process.env.ENV !== 'production') {
+  console.log('>>> ENABLE ELECTRON RELOAD');
   require('electron-reload')(__dirname, {
     electron: require(`${__dirname}/../node_modules/electron`)
   });
@@ -61,6 +65,17 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+snippetConfig({snippetsRepoPath: path.join(__dirname, '../tmp')});
+
+let recentSender = null;
+function pluginCallWhenWebpackDone(stats){
+  console.log('.... webpack done >>>>');
+  if(recentSender){
+    recentSender.send('snippet.run.ready');
+    recentSender = null;
+  }
+}
+
 ipcMain.on('snippet.run', (event, arg) => {
   const snippets = [
     {
@@ -78,8 +93,6 @@ ipcMain.on('snippet.run', (event, arg) => {
     `
     }
   ]
-  exec('test', snippets, () => {
-    console.log('ready');
-    event.sender.send('snippet.run.ready');
-  });
+  recentSender = event.sender;
+  exec('test', snippets, pluginCallWhenWebpackDone);
 });

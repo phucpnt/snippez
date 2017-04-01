@@ -3,15 +3,14 @@
  */
 const fs = require('fs');
 const path = require('path');
-const {execSync} = require('child_process');
+const {spawn} = require('child_process');
 
 module.exports.process = function process(snippetContents, rootModulesPath){
   let modules = [];
   snippetContents.forEach(src => {
     modules = modules.concat(getRequiredModules(src));
   });
-  installModules(modules, rootModulesPath);
-  return modules;
+  return installModules(modules, rootModulesPath).then((exitCode) => {return modules;});
 }
 
 function getRequiredModules(src){
@@ -41,5 +40,10 @@ function installModules(modules, cwd = path.join(__dirname, '../tmp')){
   } catch (ex) {
     fs.writeFileSync(path.join(cwd, 'package.json'), '{}', { encoding: 'UTF8' });
   }
-  execSync(['npm install --save'].concat(modules).join(' '), {cwd});
+  return new Promise((resolve) => {
+    const npmInstall = spawn('npm', ['install', '--save'].concat(modules), { cwd });
+    npmInstall.stdout.on('data', data => { console.log(`npmInstall > ${data}`); });
+    npmInstall.stderr.on('data', data => {console.error(`npmInstall > ${data}`)});
+    npmInstall.on('close', (exitCode) => resolve(exitCode));
+  });
 }
