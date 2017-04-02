@@ -1,4 +1,37 @@
 <div class="main-container">
+  <header class="header header-3">
+    <div class="branding">
+      <a href="#">
+        <span class="title">Snippez</span>
+      </a>
+    </div>
+    <div class="header-nav">
+      <a href="..." class="nav-link nav-icon">
+        <clr-icon shape="play"></clr-icon>
+      </a>
+      <a href="..." class="active nav-link nav-icon">
+        <clr-icon shape="floppy"></clr-icon>
+      </a>
+    </div>
+    <form class="search">
+      <label for="search_input">
+            <input id="search_input" type="text" placeholder="Search for keywords...">
+        </label>
+    </form>
+    <div class="header-actions">
+      <clr-dropdown class="dropdown bottom-right">
+        <button class="nav-icon" clrDropdownToggle>
+                <!--<clr-icon shape="user"></clr-icon>-->
+                <!--<clr-icon shape="caret down"></clr-icon>-->
+            </button>
+        <div class="dropdown-menu">
+          <a href="..." clrDropdownItem>About</a>
+          <a href="..." clrDropdownItem>Preferences</a>
+          <a href="..." clrDropdownItem>Log out</a>
+        </div>
+      </clr-dropdown>
+    </div>
+  </header>
   <div class="content-container">
     <nav class="sidenav">
       <snippet-list class="sidenav-content"></snippet-list>
