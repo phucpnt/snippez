@@ -27,3 +27,7 @@ ClarityIcons.add(BasicShapes);
 ClarityIcons.add(EssentialShapes);
 ClarityIcons.add(SocialShapes);
 ClarityIcons.add(TechnologyShapes);
+
+import 'codemirror';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/mode/javascript/javascript';

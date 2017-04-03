@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 // import { AboutComponent } from './about/about.component';
 import { SnippetList } from './snippet-list/snippet-list.component';
 import { SnippetEditor } from './snippet-editor/snippet-editor.component';
+import {CodemirrorComponent} from './codemirror/codemirror.component';
 import { ApiService } from './shared';
 // import { routing } from './app.routing';
 
@@ -28,6 +29,7 @@ import { removeNgStyles, createNewHosts } from '@angularclass/hmr';
     // AboutComponent,
     SnippetList,
     SnippetEditor,
+    CodemirrorComponent,
   ],
   providers: [
     ApiService
