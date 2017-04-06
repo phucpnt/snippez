@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 // import { HomeComponent } from './home/home.component';
 // import { AboutComponent } from './about/about.component';
 import { SnippetList } from './snippet-list/snippet-list.component';
+import { SnippetFileList } from './snippet-file-list/snippet-file-list.component';
 import { SnippetEditor } from './snippet-editor/snippet-editor.component';
 import {CodemirrorComponent} from './codemirror/codemirror.component';
 import { ApiService } from './shared';
@@ -28,6 +29,7 @@ import { removeNgStyles, createNewHosts } from '@angularclass/hmr';
     // HomeComponent,
     // AboutComponent,
     SnippetList,
+    SnippetFileList,
     SnippetEditor,
     CodemirrorComponent,
   ],

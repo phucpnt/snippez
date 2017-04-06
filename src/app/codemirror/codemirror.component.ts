@@ -26,7 +26,7 @@ import * as CodeMirror from 'codemirror';
       multi: true
     }
   ],
-  template: `<textarea #host></textarea>`,
+  template: `<textarea #host style="height:100%; width:100%"></textarea>`,
 })
 export class CodemirrorComponent {
 

@@ -1,1 +1,7 @@
 // styles in src/style directory are applied to the whole page
+
+.snippet-editor .CodeMirror {
+  height: 100%;
+  width: 100%;
+}
+
