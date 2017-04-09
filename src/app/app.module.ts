@@ -4,13 +4,11 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { ClarityModule } from 'clarity-angular';
 
+import {SnippetEditModule} from './screens';
+
 import { AppComponent } from './app.component';
 // import { HomeComponent } from './home/home.component';
 // import { AboutComponent } from './about/about.component';
-import { SnippetList } from './snippet-list/snippet-list.component';
-import { SnippetFileList } from './snippet-file-list/snippet-file-list.component';
-import { SnippetEditor } from './snippet-editor/snippet-editor.component';
-import {CodemirrorComponent} from './codemirror/codemirror.component';
 import { ApiService } from './shared';
 // import { routing } from './app.routing';
 
@@ -22,16 +20,13 @@ import { removeNgStyles, createNewHosts } from '@angularclass/hmr';
     HttpModule,
     FormsModule,
     ClarityModule,
+    SnippetEditModule,
     // routing
   ],
   declarations: [
     AppComponent,
     // HomeComponent,
     // AboutComponent,
-    SnippetList,
-    SnippetFileList,
-    SnippetEditor,
-    CodemirrorComponent,
   ],
   providers: [
     ApiService

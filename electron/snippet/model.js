@@ -38,17 +38,26 @@ const requireValidSnippet = (fn) => (snippet, ...args ) => {
   throw new Error('Invalid Snippet');
 };
 
-function create({description, files}){
-  const snippet = {description, files};
-  return db.post({description, files})
+function create({ description, files, _id = null }) {
+  const snippet = { description, files };
+  if (_id === null) {
+    return db.post({ description, files })
+  } else {
+    return db.put({ _id, description, files })
+  }
 }
 
 function update(updates, snippetId){
   return db.put(updates);
 }
 
+function get(snippetId){
+  return db.get(snippetId);
+}
+
 module.exports = {
   create: requireValidSnippet(create),
   update: requireValidSnippet(update),
+  get,
 }
 

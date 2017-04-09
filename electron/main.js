@@ -2,6 +2,9 @@ const electron = require('electron');
 const {ipcMain} = require('electron');
 const path = require('path');
 const _ = require('lodash');
+const bootstrap = require('./bootstrap');
+
+require('./api');
 
 const {exec, config: snippetConfig} = require('./snippet');
 // Module to control application life.
@@ -96,3 +99,6 @@ ipcMain.on('snippet.run', (event, arg) => {
   recentSender = event.sender;
   exec('test', snippets, pluginCallWhenWebpackDone);
 });
+
+bootstrap.prepareDb();
+

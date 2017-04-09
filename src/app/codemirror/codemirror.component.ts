@@ -9,8 +9,7 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import * as CodeMirror from 'codemirror';
-
+const CodeMirror = require('codemirror');
 
 /**
  * CodeMirror component

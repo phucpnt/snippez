@@ -23,7 +23,8 @@
     "start": "concurrently \"npm run server\" \"npm run electron\"",
     "start:hmr": "npm run server -- --hot",
     "postinstall": "npm run webdriver-update",
-    "electron": "electron electron"
+    "electron": "electron electron",
+    "rebuild": "electron-rebuild -w leveldown"
   },
   "dependencies": {
     "@angular/common": "2.4.7",
@@ -44,6 +45,7 @@
     "clarity-ui": "^0.8.13",
     "codemirror": "^5.25.0",
     "core-js": "^2.4.1",
+    "cors": "^2.8.3",
     "express": "^4.15.2",
     "handlebars": "^4.0.6",
     "mkdirp": "^0.5.1",
@@ -73,6 +75,7 @@
     "css-loader": "^0.26.1",
     "electron": "^1.6.2",
     "electron-packager": "^8.6.0",
+    "electron-rebuild": "^1.5.7",
     "electron-reload": "^1.1.0",
     "extract-text-webpack-plugin": "^2.0.0-beta.4",
     "file-loader": "^0.10.0",

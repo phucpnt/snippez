@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import * as _ from 'lodash';
 
 import File from '../model/snippet-file';
@@ -11,9 +11,11 @@ import File from '../model/snippet-file';
   // ]
 })
 export class SnippetFileList {
-  itemList: Array<File>;
+  @Input() fileList: Array<File> = null;;
 
   constructor(){
-    this.itemList = _.times(_.random(3, 10), (n:number) => new File(`file${n}.js`));
+    if(this.fileList == null){
+      this.fileList = _.times(_.random(3, 10), (n:number) => new File(`file${n}.js`));
+    }
   }
  }
