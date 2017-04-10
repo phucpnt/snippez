@@ -39,6 +39,6 @@
     </div>
   </nav>
   <div class="content-area">
-    <snippet-editor class="snippet-editor" [src]="fileFocusSrc" (change)="save($event)"></snippet-editor>
+    <snippet-editor #editor class="snippet-editor" [src]="fileFocusSrc" (change)="save($event)"></snippet-editor>
   </div>
 </div>

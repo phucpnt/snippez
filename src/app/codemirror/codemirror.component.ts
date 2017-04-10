@@ -51,7 +51,7 @@ export class CodemirrorComponent {
     if (v !== this._value) {
       this._value = v;
       this.onChange(v);
-      this.instance && this.instance.setValue(this._value);
+      // this.instance && this.instance.setValue(this._value);
     }
   }
 
@@ -106,6 +106,7 @@ export class CodemirrorComponent {
     this._value = value || '';
     if (this.instance) {
       this.instance.setValue(this._value);
+      this.instance.clearHistory();
     }
   }
   onChange(_){}

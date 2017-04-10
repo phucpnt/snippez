@@ -1,5 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import * as _ from 'lodash';
+import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 
 const {ipcRenderer} = require('electron');
 
@@ -8,13 +7,9 @@ const {ipcRenderer} = require('electron');
   templateUrl: './snippet-editor.component.html',
 })
 export class SnippetEditor {
-  fileList: Array<any>;
   @Input() src: String = 'console.log("hello world");';
   @Output() change = new EventEmitter<string>();
-
-  constructor(){
-    this.fileList = _.times(_.random(8, 20), (n:number) => ({name: `file ${n}`, active: n === 0}));
-  }
+  @ViewChild('editor') editor;
 
   runSnippet(){
     ipcRenderer.send('snippet.run');
@@ -24,6 +19,11 @@ export class SnippetEditor {
     })
     // poc of we can run the snippet with webpack on new window
   }
+
+  writeValue(val: string){
+    this.editor.writeValue(val);
+  }
+
   _change(value:string){
     this.change.emit(value);
   }

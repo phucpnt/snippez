@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 
 import { ApiService } from '../../shared';
 import {Snippet} from '../../model/snippet';
@@ -14,6 +14,8 @@ export class SnippetEdit {
   snippet: Snippet = null;
   fileFocus: string = null;
   fileFocusSrc: String = null;
+
+  @ViewChild('editor') editor;
 
   static defaultInitFile = 'index.js';
 
@@ -37,6 +39,7 @@ export class SnippetEdit {
   selectFile(file) {
     this.fileFocus = file.name;
     this.fileFocusSrc = this.snippet.files.find(_file => _file.name === file.name).content;
+    this.editor.writeValue(this.fileFocusSrc);
   }
 
   save(content){
