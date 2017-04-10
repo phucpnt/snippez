@@ -29,12 +29,16 @@
 <div *ngIf="!snippet" class="content-container">Loading snippet ...</div>
 <div *ngIf="!!snippet" class="content-container">
   <nav class="sidenav">
-    <snippet-file-list [fileList]="snippet.files" class="sidenav-content"></snippet-file-list>
+    <snippet-file-list
+    [fileList]="snippet.files"
+    [fileFocus]="fileFocus"
+    [selectItem]="selectFile"
+    class="sidenav-content"></snippet-file-list>
     <div class="sidenav-content">
       <p>{{snippet.description}}</p>
     </div>
   </nav>
   <div class="content-area">
-    <snippet-editor class="snippet-editor"></snippet-editor>
+    <snippet-editor class="snippet-editor" [src]="fileFocusSrc" (change)="save($event)"></snippet-editor>
   </div>
 </div>

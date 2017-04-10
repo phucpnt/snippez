@@ -11,7 +11,9 @@ import File from '../model/snippet-file';
   // ]
 })
 export class SnippetFileList {
+  @Input() fileFocus: string = null;
   @Input() fileList: Array<File> = null;;
+  @Input() selectItem: Function = (item) => {console.log(item)};
 
   constructor(){
     if(this.fileList == null){

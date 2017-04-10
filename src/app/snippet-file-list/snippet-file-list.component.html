@@ -1,2 +1,5 @@
-<a *ngFor="let item of fileList" href="#" class="nav-link">{{item.name}}</a>
+<a *ngFor="let item of fileList" href="#" class="nav-link"
+  [ngClass]="{active: fileFocus === item.name}"
+  (click)="selectItem(item)"
+  >{{item.name}}</a>
 <button class="btn btn-block">Add File</button>

@@ -51,6 +51,7 @@ export class CodemirrorComponent {
     if (v !== this._value) {
       this._value = v;
       this.onChange(v);
+      this.instance && this.instance.setValue(this._value);
     }
   }
 
