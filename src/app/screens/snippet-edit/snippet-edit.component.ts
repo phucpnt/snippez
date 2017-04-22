@@ -46,10 +46,21 @@ export class SnippetEdit {
 
   save(content){
     if(typeof content === 'string' && content !== this.fileFocusSrc){
+      console.log(content, this.fileFocusSrc);
       const index = this.snippet.files.findIndex(file => file.name === this.fileFocus)
       this.snippet.files[index].content = content;
       console.log('will save', this.snippet);
+      this.api.saveSnippet(this.snippetId, this.snippet).then(response => response.json()).then(update => {
+        this.snippet._rev = update.rev;
+      });
+    } else if (typeof content !== 'string'){
+      this.api.saveSnippet(this.snippetId, this.snippet).then(response => response.json()).then(update => {
+        this.snippet._rev = update.rev;
+      });
     }
-    this.api.saveSnippet(this.snippetId, this.snippet);
+  }
+
+  run(){
+    this.api.execSnippet(this.snippetId);
   }
 }

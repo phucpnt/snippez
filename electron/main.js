@@ -6,7 +6,7 @@ const bootstrap = require('./bootstrap');
 
 require('./api');
 
-const {exec, config: snippetConfig} = require('./snippet');
+const {execById: exec, config: snippetConfig} = require('./snippet');
 // Module to control application life.
 const app = electron.app
 // Module to create native browser window.
@@ -71,34 +71,47 @@ app.on('activate', function () {
 snippetConfig({snippetsRepoPath: path.join(__dirname, '../tmp')});
 
 let recentSender = null;
-function pluginCallWhenWebpackDone(stats){
+let snippetWindows = {};
+function pluginCallWhenWebpackDone(snippetUrl){
   console.log('.... webpack done >>>>');
   if(recentSender){
-    recentSender.send('snippet.run.ready');
+    recentSender.send('snippet.run.ready', snippetUrl);
     recentSender = null;
+    openWindow(snippetUrl);
   }
 }
 
-ipcMain.on('snippet.run', (event, arg) => {
-  const snippets = [
-    {
-      name: 'index.js',
-      content: `
-  import * as _ from 'lodash';
-  import abc from './abc';
-  console.log(_.times(3, () => console.log('hello')));
-  `}, {
-      name: 'abc.js',
-      content: `
-  const preact = require('preact');
-  console.log(preact.render);
-  console.log('abc.js');
-    `
-    }
-  ]
+ipcMain.on('snippet.run', (event, snippetId) => {
   recentSender = event.sender;
-  exec('test', snippets, pluginCallWhenWebpackDone);
+  exec(snippetId, pluginCallWhenWebpackDone);
 });
+
+function openWindow(url){
+  if(snippetWindows[url]){
+    snippetWindows[url].focus();
+    snippetWindows[url].reload();
+    return;
+  }
+
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+  // Create the browser window.
+  const snippetWindow = new BrowserWindow({width, height});
+
+  // and load the index.html of the app.
+  // mainWindow.loadURL(`file://${__dirname}/index.html`)
+  snippetWindow.loadURL(url)
+
+  // Open the DevTools.
+  snippetWindow.webContents.openDevTools()
+
+  // Emitted when the window is closed.
+  snippetWindow.on('closed', function () {
+    snippetWindows[url] = null;
+  });
+  snippetWindows[url] = snippetWindow;
+}
+
+ipcMain.on('snippet.open_window', (url) => openWindow);
 
 bootstrap.prepareDb();
 

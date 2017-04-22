@@ -79,7 +79,7 @@ function start(snippetId, callback){
   compiler.plugin('done', (stats) => {
     process.nextTick(() => {
       console.log('+++ bundle valid >>>')
-      callback();
+      callback(`http://localhost:${devPort}/${snippetId}`);
     })
   });
 
