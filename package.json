@@ -40,6 +40,7 @@
     "babel-loader": "^6.4.1",
     "babel-preset-es2015": "^6.24.0",
     "babel-preset-react": "^6.23.0",
+    "body-parser": "^1.17.1",
     "clarity-angular": "^0.8.13",
     "clarity-icons": "^0.8.13",
     "clarity-ui": "^0.8.13",

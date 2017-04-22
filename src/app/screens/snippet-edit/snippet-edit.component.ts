@@ -1,4 +1,5 @@
 import { Component, Input, ViewChild } from '@angular/core';
+import * as _ from 'lodash';
 
 import { ApiService } from '../../shared';
 import {Snippet} from '../../model/snippet';
@@ -24,6 +25,7 @@ export class SnippetEdit {
   constructor(private api: ApiService) {
     this.title = this.api.title;
     this.selectFile = this.selectFile.bind(this);
+    this.save = _.debounce(this.save, 1500);
   }
 
   ngOnChanges(){
@@ -43,6 +45,11 @@ export class SnippetEdit {
   }
 
   save(content){
-    console.log(content);
+    if(typeof content === 'string' && content !== this.fileFocusSrc){
+      const index = this.snippet.files.findIndex(file => file.name === this.fileFocus)
+      this.snippet.files[index].content = content;
+      console.log('will save', this.snippet);
+    }
+    this.api.saveSnippet(this.snippetId, this.snippet);
   }
 }

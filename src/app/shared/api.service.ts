@@ -5,4 +5,5 @@ import * as ExtApi from '../../api';
 export class ApiService {
   title = 'Snippez';
   getSnippet = ExtApi.getSnippet;
+  saveSnippet = ExtApi.saveSnippet;
 }
