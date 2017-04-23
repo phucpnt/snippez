@@ -1,6 +1,7 @@
 
 import { NgModule, ApplicationRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 import {ClarityModule} from 'clarity-angular';
 
 import {ApiService} from '../../shared/api.service';
@@ -12,6 +13,7 @@ import {CodemirrorComponent} from '../../codemirror/codemirror.component';
 @NgModule({
   imports: [
     BrowserModule,
+    FormsModule,
     ClarityModule,
   ],
   declarations: [

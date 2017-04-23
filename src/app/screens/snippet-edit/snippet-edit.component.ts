@@ -25,6 +25,7 @@ export class SnippetEdit {
   constructor(private api: ApiService) {
     this.title = this.api.title;
     this.selectFile = this.selectFile.bind(this);
+    this.addNewFile = this.addNewFile.bind(this);
     this.save = _.debounce(this.save, 1500);
   }
 
@@ -62,5 +63,9 @@ export class SnippetEdit {
 
   run(){
     this.api.execSnippet(this.snippetId);
+  }
+
+  addNewFile(filename){
+    this.snippet.files.push({name: filename, content: ''});
   }
 }
