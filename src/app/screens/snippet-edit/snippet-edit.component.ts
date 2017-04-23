@@ -1,25 +1,27 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild, OnChanges } from '@angular/core';
 import * as _ from 'lodash';
 
 import File from '../../model/snippet-file';
 import { ApiService } from '../../shared';
 import {Snippet} from '../../model/snippet';
+import {SnippetEditor} from '../../snippet-editor/snippet-editor.component';
 
 @Component({
   selector: 'screen-snippet-edit', // <my-app></my-app>
   templateUrl: './snippet-edit.component.html',
   styleUrls: ['./snippet-edit.component.scss'],
 })
-export class SnippetEdit {
+export class SnippetEdit implements OnChanges {
+  static defaultInitFile = 'index.js';
+
   url = 'https://github.com/preboot/angular2-webpack';
   title: string;
   snippet: Snippet = null;
   fileFocus: string = null;
-  fileFocusSrc: String = null;
+  fileFocusSrc: string = null;
 
-  @ViewChild('editor') editor;
+  @ViewChild('editor') editor: SnippetEditor;
 
-  static defaultInitFile = 'index.js';
 
   @Input() snippetId: string;
 
@@ -44,6 +46,7 @@ export class SnippetEdit {
   selectFile(file) {
     this.fileFocus = file.name;
     this.fileFocusSrc = this.snippet.files.find(_file => _file.name === file.name).content;
+    this.editor.changeFile(this.fileFocus);
     this.editor.writeValue(this.fileFocusSrc);
   }
 

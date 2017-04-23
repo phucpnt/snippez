@@ -55,6 +55,13 @@ export class CodemirrorComponent {
     }
   }
 
+  ngOnChanges(){
+    if(this.instance){
+      console.log(this.config);
+      this.instance.setOption('mode', this.config.mode);
+    }
+  }
+
   /**
    * On component destroy
    */
