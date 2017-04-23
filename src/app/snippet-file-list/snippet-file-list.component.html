@@ -3,7 +3,7 @@
    <clr-icon class="pull-right" shape="close" (click)="removeFile($event, item)"></clr-icon>
   {{item.name}}
 </a>
-<button class="btn btn-block" (click)="modalVisible=true">Add File</button>
+<button class="btn btn-success-outline" (click)="modalVisible=true">Add File</button>
 <clr-modal [(clrModalOpen)]="modalVisible" [clrModalSize]="'sm'">
   <h3 class="modal-title">Enter your file name</h3>
   <div class="modal-body">

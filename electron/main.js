@@ -33,7 +33,7 @@ function createWindow() {
   mainWindow.loadURL('http://localhost:10001')
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools({mode: "undocked"})
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {

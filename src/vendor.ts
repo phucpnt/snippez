@@ -6,6 +6,7 @@ import '@angular/common';
 import '@angular/http';
 import '@angular/forms';
 import '@angular/router';
+import '@angular/animations';
 
 import 'rxjs';
 import '@angularclass/hmr';
