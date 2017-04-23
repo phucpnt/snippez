@@ -4,7 +4,7 @@ export interface Snippet {
   _id: string,
   _rev: string,
   description: string,
-  files: [SnippetFile],
+  files: SnippetFile[],
   createdAt: Date,
   updatedAt: Date,
 }

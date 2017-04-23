@@ -1,5 +1,8 @@
 <h4>File List ({{ fileList.length }})</h4>
-<a *ngFor="let item of fileList" href="#" class="nav-link" [ngClass]="{active: fileFocus === item.name}" (click)="selectItem(item)">{{item.name}}</a>
+<a *ngFor="let item of fileList" href="#" class="nav-link" [ngClass]="{active: fileFocus === item.name}" (click)="selectItem(item)">
+   <clr-icon class="pull-right" shape="close" (click)="removeFile($event, item)"></clr-icon>
+  {{item.name}}
+</a>
 <button class="btn btn-block" (click)="modalVisible=true">Add File</button>
 <clr-modal [(clrModalOpen)]="modalVisible" [clrModalSize]="'sm'">
   <h3 class="modal-title">Enter your file name</h3>
@@ -13,3 +16,15 @@
     <button type="button" class="btn btn-primary" (click)="addNewFile();">ADD</button>
   </div>
 </clr-modal>
+
+<clr-modal [(clrModalOpen)]="modalRemoveFileVisible" [clrModalSize]="'sm'">
+  <h3 class="modal-title">Are you sure</h3>
+  <div class="modal-body">
+    <p>Are you sure you want to remove the file {{fileWannaRemove?.name}}?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="modalRemoveFileVisible = false">Cancel</button>
+    <button type="button" class="btn btn-danger" (click)="removeFileConfirmed(fileWannaRemove);">REMOVE</button>
+  </div>
+</clr-modal>
+

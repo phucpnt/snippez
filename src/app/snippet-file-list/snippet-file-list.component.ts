@@ -6,17 +6,19 @@ import File from '../model/snippet-file';
 @Component({
   selector: 'snippet-file-list',
   templateUrl: './snippet-file-list.component.html',
-  // styles: [
-  //   `:host{position: absolute; left: 0; right: 0; bottom: 0; top: 0; overflow: hidden; overflow-y: auto;}`
-  // ]
 })
 export class SnippetFileList {
   @Input() fileFocus: string = null;
   @Input() fileList: Array<File> = null;;
   @Input() selectItem: Function = (item) => {console.log(item)};
   @Input() onAddNewFile: Function = (filename) => {console.log(filename)};
+  @Input() onRemoveFile: Function = (file: File) => {console.log(file)};
+
   newFileName: string = '';
   modalVisible: boolean = false;
+
+  modalRemoveFileVisible: boolean = false;
+  fileWannaRemove: File = null;
 
   constructor(){
     if(this.fileList == null){
@@ -31,6 +33,17 @@ export class SnippetFileList {
     this.onAddNewFile(this.newFileName);
     this.newFileName = '';
     this.modalVisible = false;
+  }
+
+  removeFile($event, file: File){
+    this.fileWannaRemove = file;
+    this.modalRemoveFileVisible = true;
+    $event.stopPropagation();
+  }
+
+  removeFileConfirmed(file){
+    this.modalRemoveFileVisible = false;
+    this.onRemoveFile(file);
   }
 
  }

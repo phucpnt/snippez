@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 
+import File from '../../model/snippet-file';
 import { ApiService } from '../../shared';
 import {Snippet} from '../../model/snippet';
 
@@ -26,6 +27,7 @@ export class SnippetEdit {
     this.title = this.api.title;
     this.selectFile = this.selectFile.bind(this);
     this.addNewFile = this.addNewFile.bind(this);
+    this.removeFile = this.removeFile.bind(this);
     this.save = _.debounce(this.save, 1500);
   }
 
@@ -45,7 +47,7 @@ export class SnippetEdit {
     this.editor.writeValue(this.fileFocusSrc);
   }
 
-  save(content){
+  save(content = null){
     if(typeof content === 'string' && content !== this.fileFocusSrc){
       console.log(content, this.fileFocusSrc);
       const index = this.snippet.files.findIndex(file => file.name === this.fileFocus)
@@ -67,5 +69,12 @@ export class SnippetEdit {
 
   addNewFile(filename){
     this.snippet.files.push({name: filename, content: ''});
+    this.save();
+  }
+
+  removeFile(file: File){
+    const indexRemove = this.snippet.files.findIndex((f) => f.name === file.name);
+    this.snippet.files = this.snippet.files.slice(0, indexRemove).concat(this.snippet.files.slice(indexRemove+1));
+    this.save();
   }
 }
