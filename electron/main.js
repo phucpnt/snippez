@@ -102,7 +102,7 @@ function openWindow(url){
   snippetWindow.loadURL(url)
 
   // Open the DevTools.
-  snippetWindow.webContents.openDevTools({mode: 'right'})
+  // snippetWindow.webContents.openDevTools({mode: 'right'})
 
   // Emitted when the window is closed.
   snippetWindow.on('closed', function () {

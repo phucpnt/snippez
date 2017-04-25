@@ -9,6 +9,7 @@ module.exports = (entry, rootModule, port = devPort) => {
     devtool: 'source-map',
     target: 'electron-renderer',
     externals: [nodeExternals({
+      whitelist: [/\.css/],
       modulesDir: path.join(__dirname, '../tmp/node_modules'),
     })],
     entry: entry || {},
@@ -31,10 +32,10 @@ module.exports = (entry, rootModule, port = devPort) => {
         ],
       }, {
         test: /\.less$/,
-        loader: 'style!css?sourceMap!less?sourceMap',
+        loader: 'style-loader!css-loader?sourceMap!less-loader?sourceMap',
       }, {
         test: /\.css$/,
-        loader: 'style!css?sourceMap',
+        loader: 'style-loader!css-loader?sourceMap',
       }, {
         test: /\.(png|jpg|svg|gif|eot|woff|ttf)$/,
         loader: 'url-loader',

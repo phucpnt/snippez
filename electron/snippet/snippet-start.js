@@ -28,7 +28,9 @@ let entryCache = {};
 function start(snippetId, callback){
   const devPort = 15106;
 
+  entryCache.vendor = `${config.snippetsPath}/vendor.js`;
   entryCache[snippetId] = `${config.snippetsPath}/${snippetId}/index.js`;
+  entryCache[`${snippetId}-spec`] = `${config.snippetsPath}/${snippetId}/index.spec.js`;
   if(server !== null && wmInstance!== null){
     wmInstance.invalidate();
     return;
@@ -69,8 +71,31 @@ function start(snippetId, callback){
   router.get('/:snippetId', (req, res) => {
     const snippetId = req.params.snippetId;
     const template = hb.compile(fs.readFileSync(path.join(__dirname, '../resource/snippet-entry.hbs'), {encoding: 'UTF8'}));
-    res.send(template({entry: `//localhost:${devPort}/gist-a2/${snippetId}.js`}));
+    res.send(template({
+      vendor: `//localhost:${devPort}/gist-a2/vendor.js`,
+      url_iframe_result: `//localhost:${devPort}/${snippetId}/result`,
+      url_iframe_spec: `//localhost:${devPort}/${snippetId}/spec`
+    }));
   });
+
+  router.get('/:snippetId/result', (req, res) => {
+    const snippetId = req.params.snippetId;
+    const template = hb.compile(fs.readFileSync(path.join(__dirname, '../resource/snippet-result.hbs'), {encoding: 'UTF8'}));
+    res.send(template({
+      entry: `//localhost:${devPort}/gist-a2/${snippetId}.js`,
+      vendor: `//localhost:${devPort}/gist-a2/vendor.js`,
+    }));
+  });
+
+  router.get('/:snippetId/spec', (req, res) => {
+    const snippetId = req.params.snippetId;
+    const template = hb.compile(fs.readFileSync(path.join(__dirname, '../resource/snippet-result.hbs'), {encoding: 'UTF8'}));
+    res.send(template({
+      entry: `//localhost:${devPort}/gist-a2/${snippetId}-spec.js`,
+      vendor: `//localhost:${devPort}/gist-a2/vendor.js`,
+    }));
+  });
+
   server.use(router);
   server.listen(devPort, '0.0.0.0', () => {
     console.log(`DEV SERVER start on port: ${devPort}`);

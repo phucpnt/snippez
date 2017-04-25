@@ -1,14 +1,73 @@
 <!doctype html>
 <html lang="en-US">
+
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <title>Snippet</title>
 </head>
+
 <body>
   <script>
     require('module').globalPaths.push('/Users/phucpnt/projects/community/gist-a2-imp/tmp/node_modules');
   </script>
-  <script src="{{entry}}"></script>
+  <div class="main-container">
+    <header class="header-2">
+      <div class="branding">
+        <a href="javascript://" class="title">Back To Snippez</span>
+      </div>
+      <div class="header-nav">
+        <a id="result" href="javascript://" class="active nav-link nav-text">Result</a>
+        <a id="spec" href="javascript://" class="nav-link nav-text">Spec</a>
+      </div>
+    </header>
+    <div class="content-container">
+      <div id="entry-content" class="content-area" style="padding: 0">
+        <webview style="height: 100%;" id="frame" src="{{url_iframe_result}}" nodeintegration></webview>
+      </div>
+    </div>
+  </div>
   <script src="{{vendor}}"></script>
+  <script>
+    const entryContent = document.getElementById('entry-content');
+    const resultBtn = document.getElementById('result');
+    const specBtn = document.getElementById('spec');
+    resultBtn.addEventListener('click', () => {
+      resultBtn.classList.add('active');
+      specBtn.classList.remove('active');
+      while (entryContent.firstChild) {
+          entryContent.removeChild(entryContent.firstChild);
+      }
+
+      const webview = document.createElement('webview');
+      webview.setAttribute('src', '{{url_iframe_result}}');
+      webview.setAttribute('nodeintegration', true);
+      webview.setAttribute('style', 'height:100%;');
+      webview.setAttribute('disablewebsecurity', true);
+webview.addEventListener('dom-ready', () => {
+  webview.openDevTools()
+})
+
+      entryContent.appendChild(webview);
+    });
+    specBtn.addEventListener('click', () => {
+      resultBtn.classList.remove('active');
+      specBtn.classList.add('active');
+      while (entryContent.firstChild) {
+          entryContent.removeChild(entryContent.firstChild);
+      }
+
+      const webview = document.createElement('webview');
+      webview.setAttribute('src', '{{url_iframe_spec}}');
+      webview.setAttribute('nodeintegration', true);
+      webview.setAttribute('style', 'height:100%;');
+      webview.setAttribute('disablewebsecurity', true);
+      webview.addEventListener('dom-ready', () => {
+  webview.openDevTools()
+})
+
+      entryContent.appendChild(webview);
+    });
+  </script>
 </body>
+
 </html>
