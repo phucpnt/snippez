@@ -1,4 +1,7 @@
-import {Snippet} from './app/model/snippet';
+import { Snippet } from './app/model/snippet';
+import SnippetFile from './app/model/snippet-file';
+const newSnippetFiles = require('./resource/default-snippet.js');
+
 declare const fetch: any;
 
 
@@ -20,4 +23,17 @@ export function saveSnippet(id: string, snippet: Snippet){
     },
     body: JSON.stringify(snippet),
   });
+}
+
+export function createSnippet() {
+  const newSnippet = {
+    _id: ['snippez', +new Date()].join('-'),
+    description: 'untitled',
+    files: Object.keys(newSnippetFiles).map(key => {
+      return new SnippetFile(key, newSnippetFiles[key]);
+    }),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+  return saveSnippet(newSnippet._id, newSnippet).then(() => newSnippet._id);
 }

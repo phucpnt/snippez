@@ -5,7 +5,7 @@ import { SnippetEdit } from './screens/snippet-edit/snippet-edit.component';
 
 const routes: Routes = [
   { path: '', component: SnippetCollection },
-  { path: 'snippet', component: SnippetEdit }
+  { path: 'snippet/:id', component: SnippetEdit }
 ];
 
 export const routing = RouterModule.forRoot(routes);

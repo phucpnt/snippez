@@ -31,9 +31,24 @@ function check(propTypes, props) {
     return true;
 }
 
+function formalizeDate({createdAt, updatedAt}){
+  const fDate = {}
+  if(typeof createdAt === 'string'){
+    fDate.createdAt = new Date(createdAt);
+  }
+  if(typeof updatedAt === 'string'){
+    fDate.updatedAt = new Date(updatedAt);
+  }
+  return fDate;
+}
+
 const requireValidSnippet = (fn) => (snippet, ...args ) => {
-  if (check(schema, snippet)){
-    return fn(snippet, ...args);
+
+  const fSnippet = Object.assign({}, snippet, formalizeDate(snippet));
+  console.log(fSnippet);
+
+  if (check(schema, fSnippet)){
+    return fn(fSnippet, ...args);
   }
   throw new Error('Invalid Snippet');
 };
