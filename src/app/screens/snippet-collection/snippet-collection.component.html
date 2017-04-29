@@ -1,0 +1,32 @@
+<div class="main-container">
+  <app-header></app-header>
+  <div class="content-container">
+    <div class="content-area">
+      <div class="row">
+        <div *ngFor="let item of snippetList" class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="card-block">
+              <div class="card-title">
+                Snippet Title
+              </div>
+              <div class="card-text">
+                Snippet Description...
+              </div>
+            </div>
+            <div class="card-footer">
+              <a href="#" class="btn btn-sm btn-link">
+                <clr-icon shape="edit"></clr-icon>
+              </a>
+              <a href="#" class="btn btn-sm btn-link">
+                <clr-icon shape="play"></clr-icon>
+              </a>
+              <a href="#" class="btn btn-sm btn-link btn-danger">
+                <clr-icon shape="trash"></clr-icon>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

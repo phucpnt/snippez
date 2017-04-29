@@ -4,13 +4,13 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { ClarityModule } from 'clarity-angular';
 
-import {SnippetEditModule} from './screens';
+import {SnippetEditModule, SnippetCollectionModule} from './screens';
 
 import { AppComponent } from './app.component';
 // import { HomeComponent } from './home/home.component';
 // import { AboutComponent } from './about/about.component';
 import { ApiService } from './shared';
-// import { routing } from './app.routing';
+import { routing } from './app.routing';
 
 import { removeNgStyles, createNewHosts } from '@angularclass/hmr';
 
@@ -21,7 +21,8 @@ import { removeNgStyles, createNewHosts } from '@angularclass/hmr';
     FormsModule,
     ClarityModule,
     SnippetEditModule,
-    // routing
+    SnippetCollectionModule,
+    routing
   ],
   declarations: [
     AppComponent,
