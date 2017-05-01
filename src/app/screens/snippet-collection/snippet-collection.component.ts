@@ -1,13 +1,22 @@
-import { Component } from '@angular/core';
-import * as _ from 'lodash';
+import { Component, OnInit } from '@angular/core';
+import { ApiService } from '../../shared/api.service';
 
 
 @Component({
   selector: 'snippet-collection', // <my-app></my-app>
   templateUrl: './snippet-collection.component.html',
 })
-export class SnippetCollection {
+export class SnippetCollection implements OnInit {
+  snippetList = [];
+  constructor(private api: ApiService) {}
 
-  snippetList = _.times(_.random(20, 40), (n) => n);
+  ngOnInit() {
+    this.api.getSnippetList().then(response => {
+      this.snippetList = response.data.map(snippet => {
+        const [title, description] = snippet.description.split('\n', 2);
+        return Object.assign({}, snippet, {title, description});
+      });
+    });
+  }
 
 }

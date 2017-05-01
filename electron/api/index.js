@@ -31,4 +31,15 @@ app.post('/snippet/:id', (req, res) => {
   });
 });
 
+app.get('/snippet', (req, res) => {
+  const limit = req.query.limit ? parseInt(req.query.limit): undefined;
+  const offset = req.query.offset ? parseInt(req.query.offset): undefined;
 
+  Snippet.fetchPage({limit, start: offset}).then(result => {
+    res.json({
+      total: result.total_rows,
+      count: result.rows.length,
+      data: result.rows.map(row => row.doc),
+    });
+  });
+})

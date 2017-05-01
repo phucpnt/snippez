@@ -7,17 +7,25 @@ declare const fetch: any;
 
 const HOST_NAME = 'http://127.0.0.1:1806';
 
-function api(urn:string): string{
-  return `${HOST_NAME}${urn}`;
+function api(urn: string, params: object = undefined): string {
+  let queryStr = '';
+  if (params) {
+    queryStr += Object.keys(params).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`);
+  }
+  return [`${HOST_NAME}${urn}`, queryStr !== '' ? `?${queryStr}` : ''].join('');
 }
 
 export function getSnippet(id: string) {
   return fetch(api(`/snippet/${id}`)).then(response => response.json());
 }
 
-export function saveSnippet(id: string, snippet: Snippet){
+export function getSnippetList(limit= 20, offset: number = undefined) {
+  return fetch(api('/snippet', {limit, offset})).then(response => response.json());
+}
+
+export function saveSnippet(id: string, snippet: Snippet) {
   return fetch(api(`/snippet/${id}`), {
-    method: id === null ? 'PUT': 'POST',
+    method: id === null ? 'PUT' : 'POST',
     headers: {
       'Content-Type': 'application/json',
     },

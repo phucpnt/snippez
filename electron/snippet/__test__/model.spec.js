@@ -41,8 +41,8 @@ describe('Snippet Model', () => {
     })
 
     it('should support limit', (done) => {
-      model.fetchPage({ limit: 20 }).then((result) => {
-        expect(result.rows.length).toEqual(20);
+      model.fetchPage({ limit: 10 }).then((result) => {
+        expect(result.rows.length).toEqual(10);
         done();
       });
     });

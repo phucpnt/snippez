@@ -9,6 +9,7 @@ export class ApiService {
   getSnippet = ExtApi.getSnippet;
   saveSnippet = ExtApi.saveSnippet;
   createSnippet = ExtApi.createSnippet;
+  getSnippetList = ExtApi.getSnippetList;
 
   execSnippet(snippetId){
     return new Promise((resolve) => {
