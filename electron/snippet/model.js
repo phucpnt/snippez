@@ -53,26 +53,56 @@ const requireValidSnippet = (fn) => (snippet, ...args ) => {
   throw new Error('Invalid Snippet');
 };
 
-function create({ description, files, _id = null }) {
-  const snippet = { description, files };
-  if (_id === null) {
-    return db.post({ description, files })
-  } else {
-    return db.put({ _id, description, files })
+
+function createModel(db) {
+  function create({ description, files, _id = null }) {
+    const snippet = { description, files };
+    if (_id === null) {
+      return db.post({ description, files })
+    } else {
+      return db.put({ _id, description, files })
+    }
+  }
+
+  function update(updates, snippetId) {
+    return db.put(updates);
+  }
+
+  function get(snippetId) {
+    return db.get(snippetId);
+  }
+
+  function fetchPage({ limit, start}) {
+    let options = { limit };
+    if (start === undefined) {
+      options.include_docs = true;
+    } else {
+      options.limit = start;
+    }
+
+    const locatePos = db.allDocs(options);
+    if (start === undefined) {
+      return locatePos;
+    }
+    return locatePos.then(result => {
+      if (result.rows.length > 0) {
+        options.startkey = result.rows.slice(-1)[0].id;
+        options.skip = 1;
+        options.include_docs = true;
+        options.limit = limit;
+      };
+      return db.allDocs(options);
+    });
+  }
+
+  return {
+    create: requireValidSnippet(create),
+    update: requireValidSnippet(update),
+    get,
+    fetchPage,
   }
 }
 
-function update(updates, snippetId){
-  return db.put(updates);
-}
-
-function get(snippetId){
-  return db.get(snippetId);
-}
-
-module.exports = {
-  create: requireValidSnippet(create),
-  update: requireValidSnippet(update),
-  get,
-}
+module.exports = createModel(db);
+module.exports.getModel = (db) => createModel(db)
 

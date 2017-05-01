@@ -1,4 +1,5 @@
-import { Component, Input, ViewChild, OnChanges } from '@angular/core';
+import { Component, Input, ViewChild, OnChanges, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 
 import File from '../../model/snippet-file';
@@ -11,7 +12,7 @@ import {SnippetEditor} from '../../snippet-editor/snippet-editor.component';
   templateUrl: './snippet-edit.component.html',
   styleUrls: ['./snippet-edit.component.scss'],
 })
-export class SnippetEdit implements OnChanges {
+export class SnippetEdit implements OnChanges, OnInit {
   static defaultInitFile = 'index.js';
 
   url = 'https://github.com/preboot/angular2-webpack';
@@ -25,7 +26,7 @@ export class SnippetEdit implements OnChanges {
 
   @Input() snippetId: string;
 
-  constructor(private api: ApiService) {
+  constructor(private api: ApiService, private route: ActivatedRoute) {
     this.title = this.api.title;
     this.selectFile = this.selectFile.bind(this);
     this.addNewFile = this.addNewFile.bind(this);
@@ -33,9 +34,21 @@ export class SnippetEdit implements OnChanges {
     this.save = _.debounce(this.save, 1500);
   }
 
-  ngOnChanges(){
+  ngOnInit() {
+    this.route.params
+      .map(params => params['id'])
+      .subscribe((id) => {
+        this.loadSnippet(id);
+      });
+  }
+
+  ngOnChanges() {
     console.log('... on changes....');
-    this.api.getSnippet(this.snippetId).then((snippet) => {
+    this.loadSnippet(this.snippetId);
+  }
+
+  loadSnippet(id) {
+    this.api.getSnippet(id).then((snippet) => {
       this.snippet = snippet;
       console.log(this.snippet);
       this.fileFocus = SnippetEdit.defaultInitFile;
