@@ -1,47 +1,44 @@
-<header class="header header-3">
-  <div class="branding">
-    <a href="#">
-      <span class="title">Snippez</span>
-    </a>
-    <a href="#" class="nav-link nav-icon add-snippet" style="margin-left: 1em">
-      <clr-icon shape="plus-circle"></clr-icon>
-    </a>
-  </div>
-  <div class="header-nav">
-    <a href="#" (click)="run()" class="nav-link nav-icon">
-      <clr-icon shape="play"></clr-icon>
-    </a>
-    <a href="#" (click)="save($event)" class="nav-link nav-icon">
-      <clr-icon shape="floppy"></clr-icon>
-    </a>
-    <a href="#" class="nav-link nav-icon">
-      <clr-icon shape="share"></clr-icon>
-    </a>
-  </div>
-  <div class="header-actions">
-    <form class="search">
-      <label for="search_input">
+<div class="main-container">
+  <header class="header header-3">
+    <div class="branding">
+      <a href="#">
+        <span class="title">Snippez</span>
+      </a>
+      <a href="#" class="nav-link nav-icon add-snippet" style="margin-left: 1em">
+        <clr-icon shape="plus-circle"></clr-icon>
+      </a>
+    </div>
+    <div class="header-nav">
+      <a href="javascript://" (click)="run()" class="nav-link nav-icon">
+        <clr-icon shape="play"></clr-icon>
+      </a>
+      <a href="javascript://" (click)="save($event)" class="nav-link nav-icon">
+        <clr-icon shape="floppy"></clr-icon>
+      </a>
+      <a href="javascript://" class="nav-link nav-icon">
+        <clr-icon shape="share"></clr-icon>
+      </a>
+    </div>
+    <div class="header-actions">
+      <form class="search">
+        <label for="search_input">
         <input id="search_input" type="text" placeholder="Search for snippet...">
       </label>
-    </form>
-  </div>
-</header>
-<div *ngIf="!snippet" class="content-container">Loading snippet ...</div>
-<div *ngIf="!!snippet" class="content-container">
-  <nav class="sidenav">
-    <snippet-file-list
-    [fileList]="snippet.files"
-    [fileFocus]="fileFocus"
-    [selectItem]="selectFile"
-    [onAddNewFile]="addNewFile"
-    [onRemoveFile]="removeFile"
-    class="sidenav-content"></snippet-file-list>
-    <div class="sidenav-content">
-      <h4>Description</h4>
-      <p>{{snippet.description}}</p>
+      </form>
     </div>
-  </nav>
-  <div class="content-area">
-    <snippet-editor #editor class="snippet-editor" [src]="fileFocusSrc" (change)="save($event)"></snippet-editor>
+  </header>
+  <div *ngIf="!snippet" class="content-container">Loading snippet ...</div>
+  <div *ngIf="!!snippet" class="content-container">
+    <nav class="sidenav">
+      <snippet-file-list [fileList]="snippet.files" [fileFocus]="fileFocus" [selectItem]="selectFile" [onAddNewFile]="addNewFile"
+        [onRemoveFile]="removeFile" class="sidenav-content"></snippet-file-list>
+      <div class="sidenav-content">
+        <h4>Description</h4>
+        <p>{{snippet.description}}</p>
+      </div>
+    </nav>
+    <div class="content-area">
+      <snippet-editor #editor class="snippet-editor" [src]="fileFocusSrc" (change)="save($event)"></snippet-editor>
+    </div>
   </div>
 </div>

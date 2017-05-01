@@ -1,5 +1,5 @@
 <h4>File List ({{ fileList.length }})</h4>
-<a *ngFor="let item of fileList" href="#" class="nav-link" [ngClass]="{active: fileFocus === item.name}" (click)="selectItem(item)">
+<a *ngFor="let item of fileList" href="javascript://" class="nav-link" [ngClass]="{active: fileFocus === item.name}" (click)="selectItem(item)">
    <clr-icon class="pull-right" shape="close" (click)="removeFile($event, item)"></clr-icon>
   {{item.name}}
 </a>
