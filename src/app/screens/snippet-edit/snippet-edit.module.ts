@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { ClarityModule } from 'clarity-angular';
 
+import { SharedModule } from '../shared/shared.module';
 import { ApiService } from '../../shared/api.service';
 import { SnippetEdit } from './snippet-edit.component';
 import { SnippetFileList } from '../../snippet-file-list/snippet-file-list.component';
@@ -17,10 +18,9 @@ import { CodemirrorComponent } from '../../codemirror/codemirror.component';
     FormsModule,
     BrowserAnimationsModule,
     ClarityModule,
+    SharedModule,
   ],
   declarations: [
-    // HomeComponent,
-    // AboutComponent,
     SnippetEdit,
     SnippetFileList,
     SnippetEditor,

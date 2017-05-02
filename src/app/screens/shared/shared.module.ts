@@ -7,9 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ClarityModule } from 'clarity-angular';
 
-import { SharedModule } from '../shared/shared.module';
 import { ApiService } from '../../shared/api.service';
-import { SnippetCollection } from './snippet-collection.component';
+import { AppHeader } from '../../app-header/app-header.component';
 
 @NgModule({
   imports: [
@@ -19,17 +18,16 @@ import { SnippetCollection } from './snippet-collection.component';
     BrowserAnimationsModule,
     ClarityModule,
     CommonModule,
-    SharedModule,
   ],
   declarations: [
-    SnippetCollection,
+    AppHeader,
   ],
   providers: [
     ApiService
   ],
-  bootstrap: [SnippetCollection],
-  exports: [SnippetCollection],
+  bootstrap: [],
+  exports: [AppHeader],
 })
-export class SnippetCollectionModule {
+export class SharedModule {
   constructor(public appRef: ApplicationRef) { }
 }

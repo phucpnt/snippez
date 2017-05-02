@@ -4,7 +4,7 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { ClarityModule } from 'clarity-angular';
 
-import {SnippetEditModule, SnippetCollectionModule} from './screens';
+import { SnippetEditModule, SnippetCollectionModule } from './screens';
 
 import { AppComponent } from './app.component';
 // import { HomeComponent } from './home/home.component';

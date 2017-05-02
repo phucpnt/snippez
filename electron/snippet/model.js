@@ -1,4 +1,4 @@
-const PropTypes = require('proptypes');
+const PropTypes = require('proptypes').default;
 const db = require('./repo');
 
 
