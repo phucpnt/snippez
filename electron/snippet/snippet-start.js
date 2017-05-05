@@ -94,6 +94,7 @@ function start(snippetId, callback){
     const snippetId = req.params.snippetId;
     const template = hb.compile(fs.readFileSync(path.join(__dirname, '../resource/snippet-result.hbs'), {encoding: 'UTF8'}));
     res.send(template({
+      content: fs.readFileSync(`${config.snippetsPath}/${snippetId}/index.html`, 'utf8'),
       entry: `//localhost:${devPort}/gist-a2/${snippetId}.js`,
       vendor: `//localhost:${devPort}/gist-a2/vendor.js`,
     }));
