@@ -4,8 +4,8 @@ import * as _ from 'lodash';
 
 import File from '../../model/snippet-file';
 import { ApiService } from '../../shared';
-import {Snippet} from '../../model/snippet';
-import {SnippetEditor} from '../../snippet-editor/snippet-editor.component';
+import { Snippet } from '../../model/snippet';
+import { SnippetEditor } from '../../snippet-editor/snippet-editor.component';
 
 @Component({
   selector: 'screen-snippet-edit', // <my-app></my-app>
@@ -31,7 +31,8 @@ export class SnippetEdit implements OnChanges, OnInit {
     this.selectFile = this.selectFile.bind(this);
     this.addNewFile = this.addNewFile.bind(this);
     this.removeFile = this.removeFile.bind(this);
-    this.save = _.debounce(this.save, 1500);
+    this.run = this.run.bind(this);
+    this.save = _.debounce(this.save.bind(this), 1500);
   }
 
   ngOnInit() {
@@ -43,14 +44,13 @@ export class SnippetEdit implements OnChanges, OnInit {
   }
 
   ngOnChanges() {
-    console.log('... on changes....');
     this.loadSnippet(this.snippetId);
   }
 
   loadSnippet(id) {
     this.api.getSnippet(id).then((snippet) => {
+      this.snippetId = snippet._id;
       this.snippet = snippet;
-      console.log(this.snippet);
       this.fileFocus = SnippetEdit.defaultInitFile;
       this.fileFocusSrc = snippet.files.find(file => file.name === SnippetEdit.defaultInitFile).content;
     });
@@ -63,34 +63,32 @@ export class SnippetEdit implements OnChanges, OnInit {
     this.editor.writeValue(this.fileFocusSrc);
   }
 
-  save(content = null){
-    if(typeof content === 'string' && content !== this.fileFocusSrc){
-      console.log(content, this.fileFocusSrc);
+  save(content = null) {
+    if (typeof content === 'string' && content !== this.fileFocusSrc) {
       const index = this.snippet.files.findIndex(file => file.name === this.fileFocus)
       this.snippet.files[index].content = content;
-      console.log('will save', this.snippet);
       this.api.saveSnippet(this.snippetId, this.snippet).then(response => response.json()).then(update => {
         this.snippet._rev = update.rev;
       });
-    } else if (typeof content !== 'string'){
+    } else if (typeof content !== 'string') {
       this.api.saveSnippet(this.snippetId, this.snippet).then(response => response.json()).then(update => {
         this.snippet._rev = update.rev;
       });
     }
   }
 
-  run(){
+  run() {
     this.api.execSnippet(this.snippetId);
   }
 
-  addNewFile(filename){
-    this.snippet.files.push({name: filename, content: ''});
+  addNewFile(filename) {
+    this.snippet.files.push({ name: filename, content: '' });
     this.save();
   }
 
-  removeFile(file: File){
+  removeFile(file: File) {
     const indexRemove = this.snippet.files.findIndex((f) => f.name === file.name);
-    this.snippet.files = this.snippet.files.slice(0, indexRemove).concat(this.snippet.files.slice(indexRemove+1));
+    this.snippet.files = this.snippet.files.slice(0, indexRemove).concat(this.snippet.files.slice(indexRemove + 1));
     this.save();
   }
 }

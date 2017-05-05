@@ -19,6 +19,15 @@ const webpackConfig = require('../webpack.config.dev');
 let server = null;
 let wmInstance = null;
 let compiler = null;
+function CallbackPlugin(){}
+CallbackPlugin.prototype.setCallback = function (cb) {
+  this.cb = cb;
+}
+CallbackPlugin.prototype.apply = function(){
+  this.cb();
+}
+let compilerCallbackWhenDone = new CallbackPlugin();
+
 let config = {
   snippetsPath: path.join(__dirname, '../tmp/'),
   modulesLookupPath: [path.join(__dirname, '../tmp/node_modules')],
@@ -31,6 +40,9 @@ function start(snippetId, callback){
   entryCache.vendor = `${config.snippetsPath}/vendor.js`;
   entryCache[snippetId] = `${config.snippetsPath}/${snippetId}/index.js`;
   entryCache[`${snippetId}-spec`] = `${config.snippetsPath}/${snippetId}/index.spec.js`;
+  compilerCallbackWhenDone.setCallback(() => {
+    callback(`http://localhost:${devPort}/${snippetId}`);
+  });
   if(server !== null && wmInstance!== null){
     wmInstance.invalidate();
     return;
@@ -101,12 +113,7 @@ function start(snippetId, callback){
     console.log(`DEV SERVER start on port: ${devPort}`);
   });
 
-  compiler.plugin('done', (stats) => {
-    process.nextTick(() => {
-      console.log('+++ bundle valid >>>')
-      callback(`http://localhost:${devPort}/${snippetId}`);
-    })
-  });
+  compiler.plugin('done', compilerCallbackWhenDone);
 
 }
 

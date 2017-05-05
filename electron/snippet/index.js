@@ -12,15 +12,16 @@ exports.config = (config) => {
   return config;
 }
 
-exports.exec = (snippetId, snippetFiles, callback) => {
+function exec(snippetId, snippetFiles, callback){
   writeSnippetFiles(snippetId, snippetFiles);
-  installSnippetModules(snippetFiles.map(file => file.content), snippetsRepoPath).then((modules) => {
-    return start(snippetId, callback);
+  return new Promise(resolve => {
+    start(snippetId, callback);
+    resolve(snippetId);
   });
 }
-
+exports.exec = exec;
 exports.execById = (snippetId, callback) => {
-  Snippet.get(snippetId).then(snippet => {
-    exports.exec(snippetId, snippet.files, callback);
+  return Snippet.get(snippetId).then(snippet => {
+    return exec(snippetId, snippet.files, callback);
   });
 }

@@ -77,6 +77,7 @@ function pluginCallWhenWebpackDone(snippetUrl){
   if(recentSender){
     recentSender.send('snippet.run.ready', snippetUrl);
     recentSender = null;
+    console.log('open window >>>', snippetUrl);
     openWindow(snippetUrl);
   }
 }

@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
+const NpmInstallPlugin = require('npm-install-webpack-plugin');
 const path = require('path');
 const fs = require('fs');
 
@@ -43,6 +44,14 @@ module.exports = (entry, rootModule, port = devPort) => {
     },
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
+      new NpmInstallPlugin({
+        // Use --save or --save-dev
+        dev: false,
+        // Install missing peerDependencies
+        peerDependencies: true,
+        // Reduce amount of console logging
+        quiet: false,
+      })
     ],
     profile: true,
   };
