@@ -1,0 +1,11 @@
+{
+  "name": "my-awesome-snippez-repo",
+  "version": "15.10.16",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1"
+  }
+}

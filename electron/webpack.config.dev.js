@@ -5,14 +5,15 @@ const path = require('path');
 const fs = require('fs');
 
 const devPort = 15106;
+const basedir = path.join(__dirname, '../tmp');
 module.exports = (entry, rootModule, port = devPort) => {
   const config = {
     devtool: 'source-map',
     target: 'electron-renderer',
-    externals: [nodeExternals({
-      whitelist: [/\.css/],
-      modulesDir: path.join(__dirname, '../tmp/node_modules'),
-    })],
+    // externals: [nodeExternals({
+    //   whitelist: [/\.css/],
+    //   modulesDir: rootModule[0],
+    // })],
     entry: entry || {},
     output: {
       path: path.join(__dirname, '../../dist'),
@@ -24,12 +25,17 @@ module.exports = (entry, rootModule, port = devPort) => {
       alias: {},
     },
     module: {
-      noParse: /lodash/,
+      // noParse: /lodash/,
       loaders: [{
         test: /\.js?$/,
         exclude: /(node_modules)/,
         use: [
-          {loader: 'babel-loader', options: {presets: ['es2015', 'react']}}
+          {
+            loader: 'babel-loader', options: {
+              presets: ['es2015', 'react'],
+              plugins: ['transform-es2015-modules-commonjs']
+            }
+          }
         ],
       }, {
         test: /\.less$/,
@@ -51,6 +57,7 @@ module.exports = (entry, rootModule, port = devPort) => {
         peerDependencies: true,
         // Reduce amount of console logging
         quiet: false,
+        basedir: path.join(rootModule[0], '..'),
       })
     ],
     profile: true,

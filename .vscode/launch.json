@@ -11,6 +11,13 @@
       "program": "${workspaceRoot}/node_modules/.bin/jasmine",
       "cwd": "${workspaceRoot}",
       "args": [ "JASMINE_CONFIG_PATH=jasmine.json", "${relativeFile}" ]
+    },{
+      "type": "node",
+      "request": "launch",
+      "name": "Electron",
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+      "program": "${workspaceRoot}/electron/main.js",
+      "cwd": "${workspaceRoot}"
     },
     {
       "type": "node",
