@@ -20,6 +20,8 @@ export class SnippetEdit implements OnChanges, OnInit {
   snippet: Snippet = null;
   fileFocus: string = null;
   fileFocusSrc: string = null;
+  description = '';
+  showDescriptionEditor = false;
 
   @ViewChild('editor') editor: SnippetEditor;
 
@@ -53,6 +55,7 @@ export class SnippetEdit implements OnChanges, OnInit {
       this.snippet = snippet;
       this.fileFocus = SnippetEdit.defaultInitFile;
       this.fileFocusSrc = snippet.files.find(file => file.name === SnippetEdit.defaultInitFile).content;
+      this.description = snippet.description;
     });
   }
 
@@ -90,5 +93,16 @@ export class SnippetEdit implements OnChanges, OnInit {
     const indexRemove = this.snippet.files.findIndex((f) => f.name === file.name);
     this.snippet.files = this.snippet.files.slice(0, indexRemove).concat(this.snippet.files.slice(indexRemove + 1));
     this.save();
+  }
+
+  toggleEditDescription() {
+    this.showDescriptionEditor = !this.showDescriptionEditor;
+  }
+
+  saveDescription(description) {
+    console.log(description);
+    this.snippet.description = description;
+    this.save();
+    this.toggleEditDescription();
   }
 }

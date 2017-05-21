@@ -124,6 +124,7 @@ function writeSnippetFiles(snippetId, snippetFiles){
   snippetFiles.forEach(file => {
     fs.writeFileSync(path.join(config.snippetsPath, snippetId, file.name), file.content);
   });
+  return path.join(config.snippetsPath, snippetId);
 }
 
 function setConfig(nuConfig){

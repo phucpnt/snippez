@@ -19,7 +19,13 @@
         [onRemoveFile]="removeFile" class="sidenav-content"></snippet-file-list>
       <div class="sidenav-content">
         <h4>Description</h4>
-        <p>{{snippet.description}}</p>
+        <div *ngIf="!showDescriptionEditor" (click)="toggleEditDescription()"><pre>{{snippet.description}}</pre></div>
+        <div *ngIf="showDescriptionEditor">
+          <textarea *ngIf="showDescriptionEditor" [(ngModel)]="description">{{snippet.description}}</textarea>
+          <button class="btn btn-success-outline" (click)="saveDescription(description)">Save</button>
+          <button class="btn btn-link" (click)="toggleEditDescription()">Cancel</button>
+       </div>
+
       </div>
     </nav>
     <div class="content-area">

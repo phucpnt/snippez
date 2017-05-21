@@ -9,20 +9,21 @@ import File from '../model/snippet-file';
 })
 export class SnippetFileList {
   @Input() fileFocus: string = null;
-  @Input() fileList: Array<File> = null;;
+  @Input() fileList: Array<File> = null; ;
+
+  newFileName = '';
+  modalVisible = false;
+
+  modalRemoveFileVisible = false;
+  fileWannaRemove: File = null;
+
   @Input() selectItem: Function = (item) => {console.log(item)};
   @Input() onAddNewFile: Function = (filename) => {console.log(filename)};
   @Input() onRemoveFile: Function = (file: File) => {console.log(file)};
 
-  newFileName: string = '';
-  modalVisible: boolean = false;
-
-  modalRemoveFileVisible: boolean = false;
-  fileWannaRemove: File = null;
-
   constructor(){
-    if(this.fileList == null){
-      this.fileList = _.times(_.random(3, 10), (n:number) => new File(`file${n}.js`));
+    if (this.fileList == null){
+      this.fileList = _.times(_.random(3, 10), (n: number) => new File(`file${n}.js`));
     }
   }
 
