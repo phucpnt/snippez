@@ -1,5 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
+const SimpleGit = require('simple-git');
+const fs = require('fs-extra');
+const hb = require('handlebars');
+
+const mkdirp = require('mkdirp');
 const config = require('../webpack.config.gh-pages');
 const {writeSnippetFiles} = require('./snippet-start');
 
@@ -13,16 +18,71 @@ function build ({id, files, description, rootModule}) {
 
   return new Promise(resolve => {
     compiler.run((err, stats) => {
-      console.log(stats);
+      console.log(stats.toJson({
+        chunks: false,
+        modules: false,
+      }));
       if(!err){
-        resolve();
+        resolve(stats.toJson());
       } else {
         console.error(err);
       }
-    });
+    })
+  }).then(stats => {
+    const genEntryJs = stats.assetsByChunkName[id].filter(fname => /\.js$/.test(fname))[0];
+    buildRunningPage({ snippetName: id, files, genEntryJs })
   });
 }
 
+function buildRunningPage({snippetName, files, genEntryJs}){
+  const indexHtml = files.filter(file => file.name ==='index.html')[0].content;
+  const tmpl = hb.compile(fs.readFileSync(path.join(__dirname, '../resource/snippet-exported.hbs'), 'UTF8'));
+
+  fs.writeFileSync(path.join(__dirname, '../../tmp/build', snippetName, 'index.html'), tmpl({
+    content: indexHtml,
+    entry: ['.', genEntryJs].join('/'),
+  }));
+}
+
+function deploy({ghPageRepo, builtSnippetPath}){
+  /**
+   * TODO:
+   * [ ] checkout the ghPageRepo
+   * [ ] add/update built snippet files
+   * [ ] commit and push to githubRepo
+   */
+  const repoLocalPath = path.join(__dirname, '../../tmp', ghPageRepo.split('/').slice(-1)[0]);
+  let promise = new Promise(resolve => resolve());
+  let git;
+  try {
+    git = SimpleGit(repoLocalPath);
+  } catch(ex){
+    mkdirp.sync(repoLocalPath);
+    git = SimpleGit(repoLocalPath);
+    promise = new Promise(resolve => git.clone(ghPageRepo, '.', null, resolve ));
+  }
+
+  return promise.then(() => {
+    const localExportedSnippetPath = path.join(repoLocalPath, 'snippez', builtSnippetPath.split('/').slice(-1)[0]);
+    try{
+      fs.accessSync(localExportedSnippetPath);
+    } catch (ex) {
+      mkdirp(localExportedSnippetPath)
+    }
+    console.log(builtSnippetPath, localExportedSnippetPath);
+    fs.copySync(builtSnippetPath, localExportedSnippetPath);
+  }).then(() => new Promise(resolve => {
+    git.add('.', resolve);
+  })).then(() => new Promise(resolve => {
+    git.commit('Snippez: update the generated snippet', null, null, resolve)
+  })).then(() => new Promise(resolve => {
+    git.push('origin', 'master', resolve);
+  }));
+}
+
+
+
 module.exports = {
   build,
+  deploy,
 }

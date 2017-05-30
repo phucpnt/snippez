@@ -4,7 +4,7 @@ const fs = require('fs');
 const fetch = require('node-fetch');
 const _ = require('lodash');
 const { start, setConfig } = require('../snippet-start');
-const { build } = require('../snippet-export');
+const { build, deploy } = require('../snippet-export');
 
 const snippets = [{
     name: 'index.js',
@@ -21,7 +21,7 @@ console.log('hello abc.js');
   }, {
     name: 'index.html',
     content: `
-<ha2>Hello World</h2>
+<h2>Hello World</h2>
     `
   },
 
@@ -35,7 +35,7 @@ describe('Snippet - Run', () => {
     modulesLookPath: [path.join(baseSrcPath, './node_modules')],
   });
 
-  it('should build successfully', (done) => {
+  xit('should build successfully', (done) => {
     build({
       id: 'test-export',
       files: snippets,
@@ -43,4 +43,7 @@ describe('Snippet - Run', () => {
       rootModule: [path.join(baseSrcPath, './node_modules')],
      }).then(done);
   });
+  it('should deploy built snippet on Github Pages', (done) => {
+    deploy({ghPageRepo: 'git@github.com:phucpnt/phucpnt.github.io.git', builtSnippetPath: path.join(__dirname, '../../../tmp/build/test-export')}).then(done);
+  }, 5 * 60 * 1000)
 });
