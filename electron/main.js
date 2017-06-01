@@ -4,9 +4,12 @@ const path = require('path');
 const _ = require('lodash');
 const bootstrap = require('./bootstrap');
 
+const appConfig = require('./const-app.js');
+
 require('./api');
 
-const {execById: exec, config: snippetConfig} = require('./snippet');
+const {execById: exec, config: snippetConfig, shareGithubPageById} = require('./snippet');
+
 // Module to control application life.
 const app = electron.app
 // Module to create native browser window.
@@ -68,7 +71,7 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-snippetConfig({snippetsRepoPath: path.join(__dirname, '../../tmp-snippez')});
+snippetConfig({snippetsRepoPath: appConfig.TMP_SNIPPEZ_REPO_PATH});
 
 let recentSender = null;
 let snippetWindows = {};
@@ -113,6 +116,14 @@ function openWindow(url){
 }
 
 ipcMain.on('snippet.open_window', (url) => openWindow);
+ipcMain.on('snippet.share.github_page', (event, snippetId) => {
+  console.log('share snippet id', snippetId);
+  shareGithubPageById(snippetId).then(uri => {
+    electron.shell.openExternal(`https://${uri}`);
+  }).catch(err => {
+    console.error(err);
+  });
+});
 
 bootstrap.prepareDb();
 

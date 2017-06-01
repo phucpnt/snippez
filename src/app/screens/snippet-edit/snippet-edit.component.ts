@@ -105,4 +105,9 @@ export class SnippetEdit implements OnChanges, OnInit {
     this.save();
     this.toggleEditDescription();
   }
+
+  shareGithub() {
+    console.log('share github', this.snippetId);
+    this.api.shareGithub(this.snippetId);
+  }
 }

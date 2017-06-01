@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as ExtApi from '../../api';
 
-const {ipcRenderer} = require('electron');
+const { ipcRenderer } = require('electron');
 
 @Injectable()
 export class ApiService {
@@ -18,5 +18,10 @@ export class ApiService {
         resolve(snippetUrl);
       });
     });
+  }
+
+  shareGithub(snippetId) {
+    console.log('send', snippetId);
+    ipcRenderer.send('snippet.share.github_page', snippetId);
   }
 }

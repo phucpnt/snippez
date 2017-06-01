@@ -8,12 +8,12 @@ const fs = require('fs');
 
 const common = require('./webpack.config.common');
 
-module.exports = ({entry, rootModule, snippetName}) => {
+module.exports = ({entry, rootModule, snippetName, outputPath}) => {
   const config = webpackMerge(common({rootModule}), {
     target: 'web',
     entry: entry || {},
     output: {
-      path: path.join(__dirname, '../tmp/build', snippetName),
+      path: outputPath || path.join(__dirname, '../tmp/build', snippetName),
       publicPath: '',
       filename: '[name][hash].js',
     },

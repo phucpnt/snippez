@@ -35,7 +35,7 @@ describe('Snippet - Run', () => {
     modulesLookPath: [path.join(baseSrcPath, './node_modules')],
   });
 
-  xit('should build successfully', (done) => {
+  it('should build successfully', (done) => {
     build({
       id: 'test-export',
       files: snippets,

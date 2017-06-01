@@ -7,7 +7,7 @@ module.exports.prepareDb =  function prepareDb(){
   const testSnippetPath = path.join(__dirname, './resource/example-babyzscore');
   console.log('parepare db');
   getSnippet(testSnippetId).then(snippet => {
-    console.log('test snippet >>> ', snippet);
+    // console.log('test snippet >>> ', snippet);
   }).catch((err) => {
     console.log(err);
     const exampleFiles = fs.readdirSync(testSnippetPath);

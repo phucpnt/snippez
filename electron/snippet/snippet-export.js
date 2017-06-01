@@ -8,12 +8,14 @@ const mkdirp = require('mkdirp');
 const config = require('../webpack.config.gh-pages');
 const {writeSnippetFiles} = require('./snippet-start');
 
-function build ({id, files, description, rootModule}) {
+function build ({id, files, description, rootModule, outputPath}) {
+  const snippetOutputPath = path.join(outputPath, id);
   const snippetFolder = writeSnippetFiles(id, files)
   const compiler = webpack(config({
     entry: {[id]: path.join(snippetFolder, 'index.js')},
     rootModule,
     snippetName: id,
+    outputPath: snippetOutputPath,
   }));
 
   return new Promise(resolve => {
@@ -30,28 +32,29 @@ function build ({id, files, description, rootModule}) {
     })
   }).then(stats => {
     const genEntryJs = stats.assetsByChunkName[id].filter(fname => /\.js$/.test(fname))[0];
-    buildRunningPage({ snippetName: id, files, genEntryJs })
+    buildRunningPage({ snippetName: id, files, genEntryJs, snippetOutputPath});
+    return path.join(outputPath, id);
   });
 }
 
-function buildRunningPage({snippetName, files, genEntryJs}){
+function buildRunningPage({snippetName, files, genEntryJs, snippetOutputPath = path.join(__dirname, '../../tmp/build', snippetName)}){
   const indexHtml = files.filter(file => file.name ==='index.html')[0].content;
   const tmpl = hb.compile(fs.readFileSync(path.join(__dirname, '../resource/snippet-exported.hbs'), 'UTF8'));
 
-  fs.writeFileSync(path.join(__dirname, '../../tmp/build', snippetName, 'index.html'), tmpl({
+  fs.writeFileSync(path.join(snippetOutputPath, 'index.html'), tmpl({
     content: indexHtml,
     entry: ['.', genEntryJs].join('/'),
   }));
 }
 
-function deploy({ghPageRepo, builtSnippetPath}){
+function deploy({ghPageRepo, builtSnippetPath, ghPagePath = null}){
   /**
    * TODO:
    * [ ] checkout the ghPageRepo
    * [ ] add/update built snippet files
    * [ ] commit and push to githubRepo
    */
-  const repoLocalPath = path.join(__dirname, '../../tmp', ghPageRepo.split('/').slice(-1)[0]);
+  const repoLocalPath = ghPagePath || path.join(__dirname, '../../tmp', ghPageRepo.split('/').slice(-1)[0]);
   let promise = new Promise(resolve => resolve());
   let git;
   try {
