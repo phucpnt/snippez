@@ -29,7 +29,7 @@ let mainWindow
 function createWindow() {
   const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
   // Create the browser window.
-  mainWindow = new BrowserWindow({width, height});
+  mainWindow = new BrowserWindow({width, height, icon: path.join(__dirname, './resource/icon-64x64.png') });
 
   // and load the index.html of the app.
   // mainWindow.loadURL(`file://${__dirname}/index.html`)

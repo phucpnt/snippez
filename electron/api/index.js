@@ -42,4 +42,12 @@ app.get('/snippet', (req, res) => {
       data: result.rows.map(row => row.doc),
     });
   });
-})
+});
+
+app.delete('/snippet/:id/:rev', (req, res) => {
+  Snippet.remove(req.params.id, req.params.rev).then(() => {
+    res.json({
+      id: req.params.id,
+    });
+  });
+});

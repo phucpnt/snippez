@@ -95,11 +95,19 @@ function createModel(db) {
     });
   }
 
+  function remove(snippetId, rev){
+    return db.get(snippetId).then((doc) => {
+      doc._deleted = true;
+      return db.put(doc);
+    })
+  }
+
   return {
     create: requireValidSnippet(create),
     update: requireValidSnippet(update),
     get,
     fetchPage,
+    remove,
   }
 }
 

@@ -45,3 +45,12 @@ export function createSnippet() {
   };
   return saveSnippet(newSnippet._id, newSnippet).then(() => newSnippet._id);
 }
+
+export function removeSnippet({id, rev}) {
+  return fetch(api(`/snippet/${id}/${rev}`), {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+}

@@ -20,7 +20,7 @@
               <a href="#" class="btn btn-sm btn-link">
                 <clr-icon shape="play"></clr-icon>
               </a>
-              <a href="#" class="btn btn-sm btn-link btn-danger">
+              <a href="#" (click)="remove(item._id, item._rev)" class="btn btn-sm btn-link btn-danger">
                 <clr-icon shape="trash"></clr-icon>
               </a>
             </div>
