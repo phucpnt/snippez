@@ -20,7 +20,7 @@
               <a href="#" class="btn btn-sm btn-link">
                 <clr-icon shape="play"></clr-icon>
               </a>
-              <a href="#" (click)="remove(item._id, item._rev)" class="btn btn-sm btn-link btn-danger">
+              <a href="#" (click)="remove(item)" class="btn btn-sm btn-link btn-danger">
                 <clr-icon shape="trash"></clr-icon>
               </a>
             </div>
@@ -29,4 +29,14 @@
       </div>
     </div>
   </div>
+<clr-modal [(clrModalOpen)]="removalSnippetConfirmVisible" [clrModalSize]="'sm'">
+  <h3 class="modal-title">Deleting snippet</h3>
+  <div class="modal-body">
+    <p>Are you sure you want to remove the snippet `{{removalSnippet?.title}}`?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="removalSnippetConfirmVisible = false">Cancel</button>
+    <button type="button" class="btn btn-danger" (click)="remove(removalSnippet, false);">REMOVE</button>
+  </div>
+</clr-modal>
 </div>

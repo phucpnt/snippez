@@ -8,6 +8,9 @@ import { ApiService } from '../../shared/api.service';
 })
 export class SnippetCollection implements OnInit {
   snippetList = [];
+  removalSnippetConfirmVisible = false;
+  removalSnippet = null;
+
   constructor(private api: ApiService) { }
 
   ngOnInit() {
@@ -19,10 +22,19 @@ export class SnippetCollection implements OnInit {
     });
   }
 
-  remove(snippetId: string, rev: string) {
-    this.api.removeSnippet({id: snippetId, rev}).then(() => {
-      this.ngOnInit();
-    });
+
+  remove(snippet, confirm = true) {
+    if (confirm) {
+      this.removalSnippet = snippet;
+      this.removalSnippetConfirmVisible = true;
+    } else {
+      this.api.removeSnippet({ id: snippet._id, rev: snippet._rev }).then(() => {
+        this.ngOnInit();
+      }).then(() => {
+      this.removalSnippetConfirmVisible = false;
+      this.removalSnippet = undefined;
+      });
+    }
   }
 
 }
