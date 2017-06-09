@@ -8,4 +8,4 @@ const routes: Routes = [
   { path: 'snippet/:id', component: SnippetEdit }
 ];
 
-export const routing = RouterModule.forRoot(routes);
+export const routing = RouterModule.forRoot(routes, {useHash: true});

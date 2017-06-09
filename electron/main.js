@@ -15,12 +15,12 @@ const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 
-if (process.env.ENV !== 'production') {
-  console.log('>>> ENABLE ELECTRON RELOAD');
-  require('electron-reload')(__dirname, {
-    electron: require(`${__dirname}/../node_modules/electron`)
-  });
-}
+// if (process.env.ENV !== 'production') {
+//   console.log('>>> ENABLE ELECTRON RELOAD');
+//   require('electron-reload')(__dirname, {
+//     electron: require(`${__dirname}/../node_modules/electron`)
+//   });
+// }
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -29,11 +29,16 @@ let mainWindow
 function createWindow() {
   const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
   // Create the browser window.
-  mainWindow = new BrowserWindow({width, height, icon: path.join(__dirname, './resource/icon-64x64.png') });
+  mainWindow = new BrowserWindow({
+    width, height, icon: path.join(__dirname, './resource/icon-64x64.png'),
+    webPreferences: {
+      webSecurity: false
+    }
+  });
 
   // and load the index.html of the app.
-  // mainWindow.loadURL(`file://${__dirname}/index.html`)
-  mainWindow.loadURL('http://localhost:10001')
+  mainWindow.loadURL(`file://${__dirname}/../dist/index.html`)
+  // mainWindow.loadURL('http://localhost:10001')
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools({mode: "undocked"})

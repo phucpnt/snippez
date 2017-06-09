@@ -1,7 +1,19 @@
 {
-  "name": "app",
-  "version": "0.0.0",
+  "name": "snippez",
+  "author": {
+    "name": "Phuc PNT.",
+    "email": "pn.truongphuc@gmail.com"
+  },
+  "main": "electron/main.js",
+  "description": "Easy create your snippez and share on github page. And more...",
+  "version": "0.0.1",
   "license": "MIT",
+  "build": {
+    "appId": "org.phucpnt.snippez",
+    "directories": {
+      "output": "release"
+    }
+  },
   "scripts": {
     "clean": "rimraf node_modules doc dist && npm cache clean",
     "clean-install": "npm run clean && npm install",
@@ -20,11 +32,12 @@
     "test-watch": "karma start --no-single-run --auto-watch",
     "ci": "npm run e2e && npm run test",
     "docs": "typedoc --options typedoc.json src/app/app.component.ts",
-    "start": "concurrently \"npm run server\" \"npm run electron\"",
+    "start": "NODE_ENV=production concurrently \"npm run server\" \"npm run electron\"",
     "start:hmr": "npm run server -- --hot",
     "postinstall": "npm run webdriver-update",
     "electron": "electron electron",
-    "rebuild": "electron-rebuild -w leveldown"
+    "rebuild": "electron-rebuild -w leveldown",
+    "dist": "npm run build && build"
   },
   "dependencies": {
     "@angular/animations": "^4.1.0",
@@ -50,6 +63,7 @@
     "core-js": "^2.4.1",
     "cors": "^2.8.3",
     "express": "^4.15.2",
+    "fs-extra": "^3.0.1",
     "handlebars": "^4.0.7",
     "imports-loader": "^0.7.1",
     "mkdirp": "^0.5.1",
@@ -76,11 +90,13 @@
     "angular2-template-loader": "^0.6.2",
     "autoprefixer": "^6.7.7",
     "awesome-typescript-loader": "^3.1.3",
+    "babel-preset-es2015": "^6.24.1",
     "codelyzer": "3.0.1",
     "concurrently": "^3.4.0",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.0",
     "electron": "^1.6.6",
+    "electron-builder": "^18.3.5",
     "electron-packager": "^8.6.0",
     "electron-rebuild": "^1.5.7",
     "electron-reload": "^1.1.0",

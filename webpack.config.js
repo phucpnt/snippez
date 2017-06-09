@@ -61,7 +61,7 @@ module.exports = function makeWebpackConfig() {
    */
   config.output = isTest ? {} : {
     path: root('dist'),
-    publicPath: isProd ? '/' : 'http://localhost:10001/',
+    publicPath: isProd ? '' : 'http://localhost:10001/',
     filename: isProd ? 'js/[name].[hash].js' : 'js/[name].js',
     chunkFilename: isProd ? '[id].[hash].chunk.js' : '[id].chunk.js'
   };
@@ -89,6 +89,11 @@ module.exports = function makeWebpackConfig() {
    */
   config.module = {
     rules: [
+      {
+        test: /\.js$/,
+        loaders: [{loader: 'babel-loader', options: {presets: ["es2015"]}}],
+        exclude: [/node_modules/]
+      },
       // Support for .ts files.
       {
         test: /\.ts$/,
