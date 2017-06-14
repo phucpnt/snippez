@@ -1,53 +1,56 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const app = express();
 
-app.use(cors());
-app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+module.exports = function startApp() {
+  const app = express();
 
-const Snippet = require('../snippet/model');
+  app.use(cors());
+  app.use(bodyParser.json()); // for parsing application/json
+  app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-const port = 1806
+  const Snippet = require('../snippet/model');
 
-app.listen(port, (err) => {
-  if(!err){
-    console.log('Server started ....');
-  } else {
-    console.log('error...', err);
-  }
-});
+  const port = 1806
 
-app.get('/snippet/:id', (req, res) => {
-  Snippet.get(req.params.id).then((snippet) => {
-    res.json(snippet);
+  app.listen(port, (err) => {
+    if (!err) {
+      console.log('Server started ....');
+    } else {
+      console.log('error...', err);
+    }
   });
-})
 
-app.post('/snippet/:id', (req, res) => {
-  Snippet.update(req.body, req.params.id).then(snippet => {
-    res.json(snippet);
-  });
-});
+  app.get('/snippet/:id', (req, res) => {
+    Snippet.get(req.params.id).then((snippet) => {
+      res.json(snippet);
+    });
+  })
 
-app.get('/snippet', (req, res) => {
-  const limit = req.query.limit ? parseInt(req.query.limit): undefined;
-  const offset = req.query.offset ? parseInt(req.query.offset): undefined;
-
-  Snippet.fetchPage({limit, start: offset}).then(result => {
-    res.json({
-      total: result.total_rows,
-      count: result.rows.length,
-      data: result.rows.map(row => row.doc),
+  app.post('/snippet/:id', (req, res) => {
+    Snippet.update(req.body, req.params.id).then(snippet => {
+      res.json(snippet);
     });
   });
-});
 
-app.delete('/snippet/:id/:rev', (req, res) => {
-  Snippet.remove(req.params.id, req.params.rev).then(() => {
-    res.json({
-      id: req.params.id,
+  app.get('/snippet', (req, res) => {
+    const limit = req.query.limit ? parseInt(req.query.limit) : undefined;
+    const offset = req.query.offset ? parseInt(req.query.offset) : undefined;
+
+    Snippet.fetchPage({ limit, start: offset }).then(result => {
+      res.json({
+        total: result.total_rows,
+        count: result.rows.length,
+        data: result.rows.map(row => row.doc),
+      });
     });
   });
-});
+
+  app.delete('/snippet/:id/:rev', (req, res) => {
+    Snippet.remove(req.params.id, req.params.rev).then(() => {
+      res.json({
+        id: req.params.id,
+      });
+    });
+  });
+};

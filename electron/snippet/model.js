@@ -45,7 +45,6 @@ function formalizeDate({createdAt, updatedAt}){
 const requireValidSnippet = (fn) => (snippet, ...args ) => {
 
   const fSnippet = Object.assign({}, snippet, formalizeDate(snippet));
-  console.log(fSnippet);
 
   if (check(schema, fSnippet)){
     return fn(fSnippet, ...args);

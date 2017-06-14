@@ -5,14 +5,28 @@
  * @param {String} snippetId
  * @param {Function} callback
  */
+
 const path = require('path');
 const Webpack = require('webpack');
 const webpackMiddleware = require('webpack-dev-middleware');
+const webpackMerge = require('webpack-merge');
 const express = require('express');
 const Router = require('express').Router;
 const hb = require('handlebars');
 const mkdirp = require('mkdirp');
-const fs = require('fs');
+const fs = require('fs-extra');
+const { dialog } = require('electron');
+const childProcess = require('child_process');
+
+let console = null;
+if (process.env.NODE_ENV !== 'development') {
+  console = require('electron-log');
+  console.transports.file.level = 'debug';
+  console.log = console.info;
+} else {
+  console = global.console;
+}
+
 
 const webpackConfig = require('../webpack.config.dev');
 
@@ -32,7 +46,34 @@ let config = {
   snippetsPath: path.join(__dirname, '../tmp/'),
   modulesLookupPath: [path.join(__dirname, '../tmp/node_modules')],
 };
+
 let entryCache = {};
+
+function setup() {
+  // add the package.json
+  // install the dependencies
+  return new Promise(resolve => {
+    fs.copy(path.join(__dirname, '../resource/vendor.js'), path.join(config.snippetsPath, './vendor.js'));
+
+    fs.exists(path.join(config.snippetsPath, './package.json'), (exists) => {
+      if (!exists) {
+        fs.copy(path.join(__dirname, '../resource/package.json'), path.join(config.snippetsPath, './package.json'), (err) => {
+          if (!err) {
+            console.log('📦 installing packages...');
+            const npm = childProcess.spawn('npm', ['install'], { cwd: config.snippetsPath, env: process.env });
+            npm.on('error', (err) => {
+              dialog.showErrorBox('Npm install', err.message);
+            });
+            npm.on('close', () => {
+              console.log('📦 finish installing packages...');
+              resolve();
+            });
+          }
+        });
+      }
+    })
+  });
+}
 
 function start(snippetId, callback){
   const devPort = 15106;
@@ -40,6 +81,7 @@ function start(snippetId, callback){
   entryCache.vendor = `${config.snippetsPath}/vendor.js`;
   entryCache[snippetId] = `${config.snippetsPath}/${snippetId}/index.js`;
   entryCache[`${snippetId}-spec`] = `${config.snippetsPath}/${snippetId}/index.spec.js`;
+  console.log('config >> %s', JSON.stringify(config));
   compilerCallbackWhenDone.setCallback(() => {
     callback(`http://localhost:${devPort}/${snippetId}`);
   });
@@ -49,7 +91,10 @@ function start(snippetId, callback){
   }
 
 
-  compiler = new Webpack(webpackConfig(() => entryCache, config.modulesLookupPath, devPort));
+  compiler = new Webpack(webpackMerge(
+    webpackConfig(() => entryCache, config.modulesLookupPath, devPort),
+    { context: config.snippetsPath }
+  ));
   server = express();
   wmInstance = webpackMiddleware(compiler, {
     contentBase: 'demo',
@@ -76,6 +121,7 @@ function start(snippetId, callback){
       colors: true,
       chunks: false,
     },
+    log: console.log.bind(console),
   });
   server.use(wmInstance);
 
@@ -135,5 +181,6 @@ module.exports = {
   start,
   setConfig,
   writeSnippetFiles,
+  setup,
 }
 

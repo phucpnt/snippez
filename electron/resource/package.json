@@ -1,0 +1,14 @@
+{
+  "name": "snippez-my-tmp-folder",
+  "description": "Package.json for starting new tempo. project to build snippets",
+  "devDependencies": {
+    "babel": "~6.23.0",
+    "babel-loader": "~7.0.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "clarity-ui": "^0.9.3",
+    "imports-loader": "^0.7.1",
+    "jasmine-core": "^2.6.1"
+  }
+}

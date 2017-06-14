@@ -1,3 +1,6 @@
+const fixPATH = require('fix-path');
+fixPATH();
+
 const electron = require('electron');
 const {ipcMain} = require('electron');
 const path = require('path');
@@ -6,9 +9,9 @@ const bootstrap = require('./bootstrap');
 
 const appConfig = require('./const-app.js');
 
-require('./api');
+const startApi = require('./api');
 
-const {execById: exec, config: snippetConfig, shareGithubPageById} = require('./snippet');
+const {execById: exec, config: snippetConfig, shareGithubPageById, setup} = require('./snippet');
 
 // Module to control application life.
 const app = electron.app
@@ -27,6 +30,7 @@ const BrowserWindow = electron.BrowserWindow
 let mainWindow
 
 function createWindow() {
+  startApi();
   const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -37,8 +41,11 @@ function createWindow() {
   });
 
   // and load the index.html of the app.
-  mainWindow.loadURL(`file://${__dirname}/../dist/index.html`)
-  // mainWindow.loadURL('http://localhost:10001')
+  if (process.env.NODE_ENV === 'development') {
+    mainWindow.loadURL('http://localhost:10001')
+  } else {
+    mainWindow.loadURL(`file://${__dirname}/../dist/index.html`)
+  }
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools({mode: "undocked"})
@@ -77,6 +84,8 @@ app.on('activate', function () {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 snippetConfig({snippetsRepoPath: appConfig.TMP_SNIPPEZ_REPO_PATH});
+setup();
+
 
 let recentSender = null;
 let snippetWindows = {};

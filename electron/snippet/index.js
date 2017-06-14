@@ -1,6 +1,6 @@
 const appConfig = require('../const-app');
 const {process: installSnippetModules} = require('./snippet-deps-mgt');
-const {setConfig, start, writeSnippetFiles} = require('./snippet-start');
+const {setConfig, start, writeSnippetFiles, setup} = require('./snippet-start');
 const {build, deploy} = require('./snippet-export');
 const Snippet = require('./model');
 
@@ -12,6 +12,8 @@ exports.config = (config) => {
   setConfig({ snippetsPath: snippetsRepoPath, modulesLookupPath: config.modulesLookupPath || [snippetsRepoPath + '/node_modules'] });
   return config;
 }
+
+exports.setup = setup;
 
 function exec(snippetId, snippetFiles, callback){
   writeSnippetFiles(snippetId, snippetFiles);
