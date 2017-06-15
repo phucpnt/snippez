@@ -5,14 +5,14 @@ const newSnippetFiles = require('./resource/default-snippet.js');
 declare const fetch: any;
 
 
-const HOST_NAME = 'http://127.0.0.1:1806';
+const HOST_NAME = 'http://127.0.0.1:15106';
 
 function api(urn: string, params: object = undefined): string {
   let queryStr = '';
   if (params) {
     queryStr += Object.keys(params).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`);
   }
-  return [`${HOST_NAME}${urn}`, queryStr !== '' ? `?${queryStr}` : ''].join('');
+  return [`${HOST_NAME}/api${urn}`, queryStr !== '' ? `?${queryStr}` : ''].join('');
 }
 
 export function getSnippet(id: string) {

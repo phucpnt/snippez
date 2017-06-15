@@ -18,6 +18,8 @@ const fs = require('fs-extra');
 const { dialog } = require('electron');
 const childProcess = require('child_process');
 
+const {getServer, devPort, hostName} = require('../server');
+
 let console = null;
 if (process.env.NODE_ENV !== 'development') {
   console = require('electron-log');
@@ -76,16 +78,16 @@ function setup() {
 }
 
 function start(snippetId, callback){
-  const devPort = 15106;
+  const server = getServer();
 
   entryCache.vendor = `${config.snippetsPath}/vendor.js`;
   entryCache[snippetId] = `${config.snippetsPath}/${snippetId}/index.js`;
   entryCache[`${snippetId}-spec`] = `${config.snippetsPath}/${snippetId}/index.spec.js`;
   console.log('config >> %s', JSON.stringify(config));
   compilerCallbackWhenDone.setCallback(() => {
-    callback(`http://localhost:${devPort}/${snippetId}`);
+    callback(`http://${hostName}:${devPort}/${snippetId}`);
   });
-  if(server !== null && wmInstance!== null){
+  if(wmInstance!== null){
     wmInstance.invalidate();
     return;
   }
@@ -95,7 +97,6 @@ function start(snippetId, callback){
     webpackConfig(() => entryCache, config.modulesLookupPath, devPort),
     { context: config.snippetsPath }
   ));
-  server = express();
   wmInstance = webpackMiddleware(compiler, {
     contentBase: 'demo',
     hot: false,
@@ -123,45 +124,9 @@ function start(snippetId, callback){
     },
     log: console.log.bind(console),
   });
-  server.use(wmInstance);
-
-  const router = Router();
-  router.get('/:snippetId', (req, res) => {
-    const snippetId = req.params.snippetId;
-    const template = hb.compile(fs.readFileSync(path.join(__dirname, '../resource/snippet-entry.hbs'), {encoding: 'UTF8'}));
-    res.send(template({
-      vendor: `//localhost:${devPort}/gist-a2/vendor.js`,
-      url_iframe_result: `//localhost:${devPort}/${snippetId}/result`,
-      url_iframe_spec: `//localhost:${devPort}/${snippetId}/spec`
-    }));
-  });
-
-  router.get('/:snippetId/result', (req, res) => {
-    const snippetId = req.params.snippetId;
-    const template = hb.compile(fs.readFileSync(path.join(__dirname, '../resource/snippet-result.hbs'), {encoding: 'UTF8'}));
-    res.send(template({
-      content: fs.readFileSync(`${config.snippetsPath}/${snippetId}/index.html`, 'utf8'),
-      entry: `//localhost:${devPort}/gist-a2/${snippetId}.js`,
-      vendor: `//localhost:${devPort}/gist-a2/vendor.js`,
-    }));
-  });
-
-  router.get('/:snippetId/spec', (req, res) => {
-    const snippetId = req.params.snippetId;
-    const template = hb.compile(fs.readFileSync(path.join(__dirname, '../resource/snippet-result.hbs'), {encoding: 'UTF8'}));
-    res.send(template({
-      entry: `//localhost:${devPort}/gist-a2/${snippetId}-spec.js`,
-      vendor: `//localhost:${devPort}/gist-a2/vendor.js`,
-    }));
-  });
-
-  server.use(router);
-  server.listen(devPort, '0.0.0.0', () => {
-    console.log(`DEV SERVER start on port: ${devPort}`);
-  });
+  getServer().use(wmInstance);
 
   compiler.plugin('done', compilerCallbackWhenDone);
-
 }
 
 function writeSnippetFiles(snippetId, snippetFiles){

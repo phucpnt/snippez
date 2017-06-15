@@ -9,8 +9,6 @@ const bootstrap = require('./bootstrap');
 
 const appConfig = require('./const-app.js');
 
-const startApi = require('./api');
-
 const {execById: exec, config: snippetConfig, shareGithubPageById, setup} = require('./snippet');
 
 // Module to control application life.
@@ -27,10 +25,10 @@ const BrowserWindow = electron.BrowserWindow
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+let mainWindow;
 
 function createWindow() {
-  startApi();
+  bootstrap.startServer();
   const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
   // Create the browser window.
   mainWindow = new BrowserWindow({

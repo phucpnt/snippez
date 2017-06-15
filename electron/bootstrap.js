@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const {get : getSnippet, create : createSnippet} = require('./snippet/model');
+const {getServer} = require('./server');
 
 module.exports.prepareDb =  function prepareDb(){
   const testSnippetId = '@@test@@';
@@ -22,3 +23,5 @@ module.exports.prepareDb =  function prepareDb(){
     });
   })
 }
+
+module.exports.startServer = () => getServer();
