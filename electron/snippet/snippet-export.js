@@ -1,21 +1,25 @@
 const path = require('path');
 const webpack = require('webpack');
+const webpackMerge = require('webpack-merge');
 const SimpleGit = require('simple-git');
 const fs = require('fs-extra');
 const hb = require('handlebars');
-
 const mkdirp = require('mkdirp');
+
 const config = require('../webpack.config.gh-pages');
 const {writeSnippetFiles} = require('./snippet-start');
+const constApp = require('../const-app');
 
 function build ({id, files, description, rootModule, outputPath}) {
   const snippetOutputPath = path.join(outputPath, id);
   const snippetFolder = writeSnippetFiles(id, files)
-  const compiler = webpack(config({
+  const compiler = webpack(webpackMerge(config({
     entry: {[id]: path.join(snippetFolder, 'index.js')},
     rootModule,
     snippetName: id,
     outputPath: snippetOutputPath,
+  }), {
+    context: constApp.TMP_SNIPPEZ_REPO_PATH,
   }));
 
   return new Promise(resolve => {

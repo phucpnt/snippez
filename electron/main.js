@@ -137,5 +137,5 @@ ipcMain.on('snippet.share.github_page', (event, snippetId) => {
   });
 });
 
-bootstrap.prepareDb();
+// bootstrap.prepareDb();
 
