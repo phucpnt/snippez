@@ -8,9 +8,6 @@ const constApp = require('./const-app');
 let server = null;
 const hostName = 'localhost';
 const devPort = 15106;
-const config = {
-  snippetsPath: constApp.TMP_SNIPPEZ_REPO_PATH,
-}
 
 module.exports = {
   hostName,
@@ -36,9 +33,10 @@ module.exports = {
       const snippetId = req.params.snippetId;
       const template = hb.compile(fs.readFileSync(path.join(__dirname, './resource/snippet-result.hbs'), { encoding: 'UTF8' }));
       res.send(template({
-        content: fs.readFileSync(`${config.snippetsPath}/${snippetId}/index.html`, 'utf8'),
+        content: fs.readFileSync(`${constApp.TMP_SNIPPEZ_REPO_PATH}/${snippetId}/index.html`, 'utf8'),
         entry: `//localhost:${devPort}/gist-a2/${snippetId}.js`,
         vendor: `//localhost:${devPort}/gist-a2/vendor.js`,
+        path_node_module: path.join(constApp.TMP_SNIPPEZ_REPO_PATH, './node_modules'),
       }));
     });
 
@@ -48,6 +46,7 @@ module.exports = {
       res.send(template({
         entry: `//localhost:${devPort}/gist-a2/${snippetId}-spec.js`,
         vendor: `//localhost:${devPort}/gist-a2/vendor.js`,
+        path_node_module: path.join(constApp.TMP_SNIPPEZ_REPO_PATH, './node_modules'),
       }));
     });
 

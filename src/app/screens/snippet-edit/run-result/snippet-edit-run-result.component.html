@@ -1,14 +1,17 @@
 <div class="snippet-run-result main-container">
   <header class="header-2">
     <div class="header-nav">
-      <a (click)="showResult()" href="javascript://" class="active nav-link nav-text">Result</a>
-      <a (click)="showSpec()" href="javascript://" class="nav-link nav-text">Spec</a>
-    </div>
-    <div class="header-actions">
       <a (click)="onClose()" href="javascript://" class="nav-link nav-icon">
         <clr-icon shape="close"></clr-icon>
       </a>
+      <a (click)="showResult()" href="javascript://" class="active nav-link nav-text">Result</a>
+      <a (click)="showSpec()" href="javascript://" class="nav-link nav-text">Spec</a>
     </div>
+    <!--<div class="header-actions">
+      <a (click)="onClose()" href="javascript://" class="nav-link nav-icon">
+        <clr-icon shape="close"></clr-icon>
+      </a>
+    </div>-->
   </header>
   <div class="content-container" #snippetRunResult>
   </div>
