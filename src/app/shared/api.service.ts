@@ -12,10 +12,10 @@ export class ApiService {
   getSnippetList = ExtApi.getSnippetList;
   removeSnippet = ExtApi.removeSnippet;
 
-  execSnippet(snippetId){
+  execSnippet(snippetId): Promise<string> {
     return new Promise((resolve) => {
       ipcRenderer.send('snippet.run', snippetId)
-      ipcRenderer.once('snippet.run.ready', (snippetUrl) => {
+      ipcRenderer.once('snippet.run.ready', (_, snippetUrl) => {
         resolve(snippetUrl);
       });
     });

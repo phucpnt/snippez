@@ -9,3 +9,25 @@
   padding-left: .5em;
 }
 
+.container-snippet-run-result{
+  position: absolute;
+  left: 50%;
+  top: 60px;
+  right: 0;
+  bottom: 0;
+  background: red;
+
+  .main-container{
+    height: 100%;
+  }
+  header{
+    background: #7f8c98;
+  }
+  .container-container{
+    background: red;
+  }
+  .webview {
+    width: 100%;
+  }
+}
+

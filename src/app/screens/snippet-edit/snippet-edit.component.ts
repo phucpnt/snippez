@@ -15,6 +15,8 @@ import { SnippetEditor } from '../../snippet-editor/snippet-editor.component';
 export class SnippetEdit implements OnChanges, OnInit {
   static defaultInitFile = 'index.js';
 
+  private snippetResultUrl = '';
+
   url = 'https://github.com/preboot/angular2-webpack';
   title: string;
   snippet: Snippet = null;
@@ -22,6 +24,7 @@ export class SnippetEdit implements OnChanges, OnInit {
   fileFocusSrc: string = null;
   description = '';
   showDescriptionEditor = false;
+  resultVisible = false;
 
   @ViewChild('editor') editor: SnippetEditor;
 
@@ -35,6 +38,7 @@ export class SnippetEdit implements OnChanges, OnInit {
     this.removeFile = this.removeFile.bind(this);
     this.run = this.run.bind(this);
     this.save = _.debounce(this.save.bind(this), 1500);
+    this.onCloseResult = this.onCloseResult.bind(this);
   }
 
   ngOnInit() {
@@ -81,7 +85,15 @@ export class SnippetEdit implements OnChanges, OnInit {
   }
 
   run() {
-    this.api.execSnippet(this.snippetId);
+    this.api.execSnippet(this.snippetId).then((url) => {
+      console.log('snippet result url', url);
+      this.resultVisible = true;
+      this.snippetResultUrl = url;
+    });
+  }
+
+  onCloseResult() {
+    this.resultVisible = false;
   }
 
   addNewFile(filename) {

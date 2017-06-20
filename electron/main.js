@@ -34,7 +34,8 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width, height, icon: path.join(__dirname, './resource/icon-64x64.png'),
     webPreferences: {
-      webSecurity: false
+      webSecurity: false,
+      nodeIntegration: true,
     }
   });
 
@@ -93,7 +94,7 @@ function pluginCallWhenWebpackDone(snippetUrl){
     recentSender.send('snippet.run.ready', snippetUrl);
     recentSender = null;
     console.log('open window >>>', snippetUrl);
-    openWindow(snippetUrl);
+    // openWindow(snippetUrl);
   }
 }
 

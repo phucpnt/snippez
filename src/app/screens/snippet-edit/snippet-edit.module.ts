@@ -11,6 +11,7 @@ import { SnippetEdit } from './snippet-edit.component';
 import { SnippetFileList } from '../../snippet-file-list/snippet-file-list.component';
 import { SnippetEditor } from '../../snippet-editor/snippet-editor.component';
 import { CodemirrorComponent } from '../../codemirror/codemirror.component';
+import { SnippetRunResult } from './run-result/snippet-edit-run-result.component';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { CodemirrorComponent } from '../../codemirror/codemirror.component';
     SnippetFileList,
     SnippetEditor,
     CodemirrorComponent,
+    SnippetRunResult,
   ],
   providers: [
     ApiService

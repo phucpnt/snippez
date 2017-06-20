@@ -33,3 +33,6 @@
     </div>
   </div>
 </div>
+<div *ngIf="resultVisible" class="container-snippet-run-result">
+  <snippet-run-result [resultUrl]="snippetResultUrl" [onClose]="onCloseResult"></snippet-run-result>
+</div>
